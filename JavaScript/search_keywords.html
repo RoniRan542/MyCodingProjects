@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+#button1 {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 12px 26px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+#button2 {
+  background-color: #008CBA; /* blue */
+  border: none;
+  color: white;
+  padding: 12px 26px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+div {
+	margin: 25px 100px 10px 100px;
+	text-align: center; 
+	font-family: arial;
+	background-color: white;
+	
+	padding:10px 15px 15px 15px;
+}
+
+body {
+	background-color: #eeeee4;
+	
+}
+</style>
+
+<body>
+<div >
+<h1>Google WS keywords</h1>
+
+<p>enter keywords, separated by a comma:</p>
+
+<form id="myform">
+  <textarea id="myTextarea" name="list" rows="10" cols="50" autofocus></textarea>
+  <br><br>
+  <input id="button1" type="button" onclick="myFunction()" value="Go!">
+  <br><br><input id="button2" type = "button" value = "Reset data" onClick = "resetButton()">  
+  <br>
+  <br>
+  <br>
+<script>
+var txt = "";
+var i = 0; 
+var flag = 0;
+function myFunction() {
+
+  
+  txt = document.getElementById("myTextarea").value ;
+  
+  const myArray = txt.split(",");
+  
+  while(i < myArray.length)
+  {
+  	window.open('http://google.com/search?q='+myArray[i]);
+  	i += 1; 
+  }
+  flag = 1;
+}
+
+function resetButton(){  
+   location.reload();  
+ }   
+</script>
+
+</form>
+
+<iframe width="245" height="120" src="https://www.youtube.com/embed/tgbNymZ7vqY">
+</iframe>
+</div>
+
+
+</body>
+</html>
