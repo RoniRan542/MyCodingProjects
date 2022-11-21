@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108066418-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-108066418-1');
+
+        window.addEventListener('message', function(event) {
+            // Ignores messages from untrusted domains.
+            if (event.origin != 'http://kivunim.huji.ac.il/quest/WTS/wts3.5/wts_main.html') return;
+
+            ga('create', 'UA-108066418-1', 'auto', {
+                clientId: event.data
+            });
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+    <!-- Importing SheetJS for Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.16.8/dist/xlsx.full.min.js" integrity="sha256-Ic7HP804IrYks4vUqX1trFF1Nr33RjONeJESZnYxsOY=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+
+    <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title> -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" /> מחפשים כיוונים לעתיד?
+
+
+    </title>
+    <meta http-equiv="x-ua-compatible" content="IE=8">
+    <link href="div.css" rel="stylesheet" type="text/css">
+    <link href="menuCss.css" rel="stylesheet" type="text/css">
+    <script src="./kl4_files/jquery-1.10.2.js"></script>
+    <style type="text/css"></style>
+
+
+
+    <script type="text/javascript">
+        function goto(pageType, identityType, id, menuType, menuId) {
+
+            if (menuId != -1) window.location = pageType + ".aspx?" + identityType + "=" + id + "&" + menuType + "=" + menuId;
+
+            else window.location = id;
+
+        }
+
+
+
+        function gotoURL(url) {
+
+            window.location = url;
+
+        }
+        //index of the major chosen by the user
+        var majorIndex;
+
+        function choose(major) {
+            majorIndex = major;
+            let result = [];
+            let BAmajors = [];
+            let MAmajors = [];
+            let values = [];
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET", "BA_MA_table 15.6.2021.xlsx", true);
+            xhttp.responseType = "arraybuffer";
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = new Uint8Array(xhttp.response);
+                    var workbook = XLSX.read(data, {
+                        type: "array"
+                    });
+                    var sheet = workbook["Sheets"]["Sheet 1"];
+                    /* process the workbook: get BA major, MA majors and values of cells */
+                    var keyLetter;
+                    var keyNum;
+
+                    Object.keys(sheet).forEach(function(key) {
+                        keyLetter = key.charAt(0);
+                        keyNum = key.charAt(1);
+
+                        if (key.includes("A") && key != "A1") {
+                            BAmajors.push(sheet[key].v);
+                        } else if (key.includes("1") && !key.includes("A") && key.length < 3) {
+                            MAmajors.push(sheet[key].v);
+                        } else {
+                            if (keyLetter != "!" && !key.includes("A1")) {
+                                values.push(sheet[key].v);
+                            }
+
+                        }
+
+                    });
+
+                    console.log("BAs: " + BAmajors);
+                    console.log("MAmajors: " + MAmajors);
+                    console.log("values: " + values);
+
+                    //slice values into chunks by MAmajors.length in order to have an array for each BA major
+                    const result = [];
+                    for (let i = 0; i < values.length; i += MAmajors.length) {
+                        let chunk = [];
+                        chunk = values.slice(i, i + MAmajors.length);
+                        result.push(chunk);
+                    }
+                    console.log("result: " + result[9]);
+
+                    //find indexes of all occurrances of 3, 2 and 1 in the matrix and find the matching MA majors
+                    const indexOfAll = (arr, val) => arr.reduce((acc, el, i) => (el === val ? [...acc, i] : acc), []);
+                    let MAs1 = [];
+                    let MAs2 = [];
+                    let MAs3 = [];
+                    MAsInx = indexOfAll(result[majorIndex], 3);
+                    for (j = 0; j < MAsInx.length; j++) {
+                        MAs3[j] = MAmajors[MAsInx[j]]
+                    }
+                    console.log(MAs3);
+                    MAsInx = indexOfAll(result[majorIndex], 2);
+                    for (j = 0; j < MAsInx.length; j++) {
+                        MAs2[j] = MAmajors[MAsInx[j]]
+                    }
+                    console.log(MAs2);
+                    MAsInx = indexOfAll(result[majorIndex], 1);
+                    for (j = 0; j < MAsInx.length; j++) {
+                        MAs1[j] = MAmajors[MAsInx[j]]
+                    }
+                    // write the output of the results inside dives with text
+                    document.getElementById("para_head").innerHTML = "<div class='text' style='font-size: medium;margin-bottom:10px;color:black;'><b>אלו תחומי/מסלולי הלימוד לתואר השני</b> שניתן להתקבל אליהם לאחר סיום הלימודים לתואר ראשון ב<b>" + BAmajors[majorIndex] + "</b>:</div>";
+                    document.getElementById("txt").innerHTML = "<div class='text' style='color:black;'>המשוב שלהלן מציג את התחומים לתואר שני שניתן ללמוד לאחר סיום תואר ראשון בתחום שציינת.<br>" +
+                        "תחומי הלימוד והמסלולים לתואר שני מוצגים בקבוצות. ראשית, אלה שניתן להתקבל אליהם ללא צורך בלימודי השלמה כלשהם, בהמשך אלה שבהם נדרשים מספר קורסי השלמה ולבסוף, תחומי ומסלולי לימוד שנדרשת בהם שנת השלמה או יותר.</div>";
+                    if (MAs3.length != 0) {
+                        document.getElementById("MAmajors1").innerHTML = "<div><h3 style='background-color:rgba(136, 204, 0,0.9);border-style: groove;'><b>בתחומים הבאים אין צורך בלימודי השלמה כלשהם:</b></h3></div>";
+                        for (let i = 0; i < MAs3.length; i++) {
+                            let major = document.createElement("div");
+                            let textnode = document.createTextNode(MAs3[i]);
+                            major.appendChild(textnode);
+                            document.getElementById("MAmajors1").appendChild(major);
+                        }
+                    } else {
+                        document.getElementById("MAmajors1").innerHTML = "";
+                    }
+                    if (MAs2.length != 0) {
+                        document.getElementById("MAmajors2").innerHTML = "<div><h3 style='background-color:rgba(204, 255, 102,0.8);border-style: groove;'><b>בתחומים הבאים נדרשים מספר קורסי השלמה (במקביל ללימודי שנה ראשונה בתואר השני):</b></h3></div>";
+                        for (let i = 0; i < MAs2.length; i++) {
+                            let major = document.createElement("div");
+                            let textnode = document.createTextNode(MAs2[i]);
+                            major.appendChild(textnode);
+                            document.getElementById("MAmajors2").appendChild(major);
+                        }
+                    } else {
+                        document.getElementById("MAmajors2").innerHTML = "";
+                    }
+                    if (MAs1.length != 0) {
+                        document.getElementById("MAmajors3").innerHTML = "<div><h3 style='background-color:rgba(255, 214, 51,0.7);border-style: groove;'><b>בתחומים הבאים עליך ללמוד שנת השלמה או יותר:</b></h3></div>";
+                        for (let i = 0; i < MAs1.length; i++) {
+                            let major = document.createElement("div");
+                            let textnode = document.createTextNode(MAs1[i]);
+                            major.appendChild(textnode);
+                            document.getElementById("MAmajors3").appendChild(major);
+                        }
+                    } else {
+                        document.getElementById("MAmajors3").innerHTML = "";
+                    }
+
+
+
+                }
+            };
+            xhttp.send();
+
+
+
+        }
+    </script>
+
+
+
+    <style type="text/css"></style>
+    <style id="style-1-cropbar-clipper">
+        /* Copyright 2014 Evernote Corporation. All rights reserved. */
+        
+        .en-markup-crop-options {
+            top: 18px !important;
+            left: 50% !important;
+            margin-left: -100px !important;
+            width: 200px !important;
+            border: 2px rgba(255, 255, 255, .38) solid !important;
+            border-radius: 4px !important;
+        }
+        
+        .en-markup-crop-options div div:first-of-type {
+            margin-left: 0px !important;
+        }
+    </style>
+</head>
+
+<body id="body">
+
+
+    <form method="post" action="./choose_files/choose.html" id="form1">
+
+        <div class="aspNetHidden">
+            <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTEwOTI1OTYyNzVkZOXJTL0MVdlECJZlTYgzs2jM2/NUu+FQlmpowrDmecSR">
+        </div>
+
+        <div class="aspNetHidden">
+
+            <input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAALZl/9H9Af0ZxXoLHK1g8Pl4+3WpZQNb82rzs2KnT3rh3o2YvSEE1p2s5dS1LZkl/NnTY3T/2mO/gD2lisKkQTG">
+        </div>
+
+        <div id="wrapper" class="wrapper">
+
+            <div class="header-bg"></div>
+
+            <div class="header">
+                <div class="logo">
+                    <a href="BAMA_system.html" style="text-decoration: none">
+                        <img src="../../choose_files/KivunimLogo.png" width="151px" height="85px" border="0" alt="" title=""></a>
+                </div>
+
+
+                <div class="menu-header">
+                    <ul id="nav" class="dropdown">
+                        <li>
+                            <table border="0" cellspacing="0" cellpadding="0" dir="rtl" margin="0" width="100%">
+                                <tbody>
+                                    <tr id="row2" style="cursor:pointer;" onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;Register.aspx&#39;, &#39;hmenu&#39;,-1);">
+                                        <tr>
+                                            <td class="arrow-down">&nbsp;</td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        <li>
+                            <table border="0" cellspacing="0" dir="rtl" cellpadding="0" width="100%">
+                                <tbody>
+                                    <tr id="row3" style="cursor:pointer;" onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;BAMAinfo.html&#39;, &#39;hmenu&#39;,-1);">
+                                        <td id="td3" class="td-Style td-NotSelected">כדאי לקרוא</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="arrow-down">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        <li>
+                            <table border="0" cellspacing="0" cellpadding="0" dir="rtl" margin="0" width="100%">
+                                <tbody>
+                                    <tr id="row4" style="cursor:pointer;" onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;BA_to_MA.html&#39;, &#39;hmenu&#39;,-1);">
+                                        <td id="td4" class="td-Style td-NotSelected">מתואר ראשון לשני</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="arrow-down">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        <li>
+                            <table border="0" cellspacing="0" cellpadding="0" dir="rtl" margin="0" width="100%">
+                                <tbody>
+                                    <tr id="row5" style="cursor:pointer;" onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;MA_to_BA.html&#39;, &#39;hmenu&#39;,-1);">
+                                        <td id="td5" class="td-Style tdLast-NotSelected">מה מוביל לתואר שני בתחום שמעניין אותי?</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="arrow-down">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+
+                        <li>
+                            <table border="0" cellspacing="0" dir="rtl" cellpadding="0" width="100%">
+                                <tbody>
+                                    <tr id="row7" style="cursor:pointer;" onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;kl4_table.html&#39;, &#39;hmenu&#39;,-1);">
+                                        <!--<td id="td7" class="td-Style td-NotSelected">יעוץ אישי</td></tr>-->
+                                        <tr>
+                                            <td class="arrow-down">&nbsp;</td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                            <ul onmouseover="SetParentBG(td7, &#39;white&#39;, &#39;td-Selected&#39;);" onmouseout="SetParentBG(td7, &#39;&#39;, &#39;td-NotSelected&#39;); ">
+
+                            </ul>
+                        </li>
+                        <li>
+                            <table border="0" cellspacing="0" cellpadding="0" dir="rtl" margin="0" width="100%">
+                                <tbody>
+                                    <tr id="row8" style="cursor:pointer;" onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;kl4_feedback.html&#39;, &#39;hmenu&#39;,-1);">
+                                        <!--<td id="td8" class="td-Style tdLast-NotSelected">תנו משוב</td></tr>-->
+                                        <tr>
+                                            <td class="arrow-down">&nbsp;</td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                    </ul>
+                </div>
+                </ul>
+                </li>
+                </ul>
+            </div>
+
+            <div class="content" style="text-align:center;margin-bottom:10px;overflow:hidden;">
+
+
+                <div style="width:80%; text-align: right; height: auto; margin:auto;">
+                    <h2 style="line-height: 99%;font-size: 25px; margin: 0px;"> לאיזה תואר שני אוכל להתקבל?</h2>
+
+                </div>
+                <div class="page-content" style="margin-right: 200px;">
+                    <div class="text" style="color:black;">
+                        <p style="text-align: right;"><span style="font-size: small;"><span style="font-family: arial, helvetica, sans-serif;">
+        <p dir="RTL"><span style="font-size: medium;"><span style="font-family: arial, helvetica, sans-serif;">
+		<b>בחר בתחום הלימודים לתואר ראשון</b> על מנת לראות תארים שניים מתאימים.
+
+</p>
+		
+		</p>
+
+<ol>
+
+<form action="example_input.php" method="post" >
+<p>
+<select id ="selectOptions" onchange="choose(this.value)" style="font-size: medium; font-weight: bold;">
+ <!--<select onchange="if (this.value) window.location.href=this.value" style="font-size: medium;">-->
+<option value="" selected >בחר בחוג המבוקש מהרשימה שלהלן</option>  
+<script language="JavaScript"  type="text/JavaScript">
+
+	var values = [];
+	var BAmajors = [];
+	var MAmajors = [];
+	var MAs = [];
+	var BAs = [];
+/* set up async GET request */
+
+	
+	//make http request to get the xlsx file
+    var req = new XMLHttpRequest();
+    
+    req.responseType = "arraybuffer";
+	
+    req.onload = function(e) {
+      var data = new Uint8Array(req.response);
+	  //call function to process the excel file
+      getXLSXdata(data);
+	  
+	}
+	req.open("GET", "BA_MA_table 15.6.2021.xlsx", true);
+	req.send();	
+	
+function getXLSXdata(data){
+
+	var workbook = XLSX.read(data, {type:"array"});
+	  var sheet = workbook["Sheets"]["Sheet 1"];
+	  /* get BA and MA majors and values of cells and then put BA majors in the select options*/
+	  var keyLetter;
+	  var keyNum;
+      
+	  Object.keys(sheet).forEach(function(key) {
+	  keyLetter = key.charAt(0);
+	  keyNum = key.charAt(1);
+	  
+	  if (key.includes("A")&& key != "A1"){
+		BAmajors.push(sheet[key].v);
+	  }
+	  else if (key.includes("1")&&!key.includes("A")&& key.length <3){
+		MAmajors.push(sheet[key].v);
+	  }else{
+		if(keyLetter != "!"&& !key.includes("A1")){
+		values.push(sheet[key].v);
+	  }
+		
+	  }	  
+    
+	});
+	select = document.getElementById("selectOptions");
+	for (i=0; i<BAmajors.length; i++) {
+		var option = document.createElement("option"); 
+		option.setAttribute("value", i);
+		var textnode = document.createTextNode(BAmajors[i]); 
+		option.appendChild(textnode);   
+		select.appendChild(option);
+	};
+    
+	
+	
+
+}	
+
+	
+
+
+
+
+
+
+	
+</script>
+</select>
+<div id ="container"> 
+<div id ="para_head"></div>
+<div id ="txt"></div>
+<div id="MAmajors1"></div>
+<div id="MAmajors2"></div>
+<div id="MAmajors3"></div>
+</div>
+
+<script>
+
+//var x = document.getElementById("mySelect").selectedIndex;
+  //alert(document.getElementsByTagName("option")[x].value);
+  
+ 
+
+</script> 
+</p>
+</tr>
+</form>
+</div>
+</ol>
+
+
+
+
+
+    </div>
+	</div>
+	
+
+     <div class="footer-bg"></div>
+           <div class="footer">
+                <div class="footer-r" dir="rtl">
+                    <div class="footer-text">
+                        <div class="footer-menu">
+                            <ul id="nav" class="dropdown">
+							<li><table border="0" cellspacing="0" cellpadding="0" margin="0" width="100%"><tbody><tr id="row8" style="cursor:pointer;" onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;../kl4_mianachnu.html&#39;, &#39;hmenu&#39;,-1);"><td id="td8" class="tdLast-NotSelected"><b>מי אנחנו</b></td></tr><tr><td class="arrow-down">&nbsp;</td></tr></tbody></table></li>
+							<!--<li><table border="0" cellspacing="0" cellpadding="0" margin="0" width="100%"><tbody><tr id="row19" style="cursor:pointer;" onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;kl4_colleagues.html&#39;, &#39;hmenu&#39;,-1);"><td id="td19" class="td-Style-bot td-NotSelected-bot">שותפים </td></tr><tr><td class="arrow-down">&nbsp;</td></tr></tbody></table></li>
+							<li><table border="0" cellspacing="0" cellpadding="0" dir="rtl" margin="0" width="100%"><tbody><tr id="row9" style="cursor:pointer;" onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;kl4_said_about_us.html&#39;, &#39;hmenu&#39;,-1);"><td id="td9" class="td-Style-bot td-NotSelected-bot">אמרו עלינו</td></tr><tr><td class="arrow-down">&nbsp;</td></tr></tbody></table></li>
+							<li><table border="0" cellspacing="0" cellpadding="0" dir="rtl" margin="0" width="100%"><tbody><tr id="row10" style="cursor:pointer;" onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;kl4_terms_of_use.html&#39;, &#39;hmenu&#39;,-1);"><td id="td10" class="td-Style-bot td-NotSelected-bot">תנאי שימוש באתר</td></tr><tr><td class="arrow-down">&nbsp;</td></tr></tbody></table></li>
+							<li><table border="0" cellspacing="0" cellpadding="0" dir="rtl" margin="0" width="100%"><tbody><tr id="row11" style="cursor:pointer;" onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;kl4_contact_us.html&#39;, &#39;hmenu&#39;,-1);"><td id="td11" class="td-Style-bot td-NotSelected-bot">צור קשר</td></tr><tr><td class="arrow-down">&nbsp;</td></tr></tbody></table></li>
+							<li><table border="0" cellspacing="0" cellpadding="0" dir="rtl" margin="0" width="100%"><tbody><tr id="row12" style="cursor:pointer;" onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;kl4_yoatzim.html&#39;, &#39;hmenu&#39;,-1);"><td id="td12" class="td-Style-bot td-NotSelected-bot">ליועצים</td></tr><tr><td class="arrow-down">&nbsp;</td></tr></tbody></table></li>
+							<li><table border="0" cellspacing="0" cellpadding="0" dir="rtl" margin="0" width="100%"><tbody><tr id="row13" style="cursor:pointer;" onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;kl4_website_map.html&#39;, &#39;hmenu&#39;,-1);"><td id="td13" class="td-Style-bot td-NotSelected-bot">מפת אתר</td></tr><tr><td class="arrow-down">&nbsp;</td></tr></tbody></table></li>
+							<li><table border="0" cellspacing="0" cellpadding="0" dir="rtl" margin="0" width="100%"><tbody><tr id="row14" style="cursor:pointer;" onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;kl4_feedback.html&#39;, &#39;hmenu&#39;,-1);"><td id="td14" class="td-Style-bot tdLast-NotSelected">תנו משוב</td></tr><tr><td class="arrow-down">&nbsp;</td></tr></tbody></table></li></ul>-->
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="footer_allRights_Reserved" style="align:left;">
+
+                    <span class="footer-text">
+
+                 כל הזכויות שמורות לכיוונים לעתיד </a><span id="year"></span>&nbsp;©&nbsp;
+
+
+                    </div>
+
+                </div>
+
+
+
+                <script>
+                    //updates the year in All Rights Reserved
+                    var d = new Date();
+                    document.getElementById("year").innerHTML = d.getFullYear();
+                </script>
+
+            </div>
+
+</body>
+
+</html>

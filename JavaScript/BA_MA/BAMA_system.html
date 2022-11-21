@@ -1,0 +1,513 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <title>
+        כיוונים לעתיד-מה ללמוד?
+    </title>
+    <!-- <meta http-equiv="x-ua-compatible" content="IE=8"> -->
+    <link href="div2.css" rel="stylesheet" type="text/css">
+    <link href="menuCss.css" rel="stylesheet" type="text/css">
+
+    <!-- SCRIPTS -->
+    <script src="./choose_files/jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+        function goto(pageType, identityType, id, menuType, menuId) {
+            if (menuId != -1) window.location = pageType + ".aspx?" + identityType + "=" + id + "&" + menuType + "=" + menuId;
+            else window.location = id;
+        }
+
+        function gotoURL(url) {
+            window.location = url;
+        }
+    </script>
+    <script type="text/javascript" src="./choose_files/410.js"></script>
+    <script>
+        //updates the year at "all rights reserved" line
+        var d = new Date();
+        document.getElementById("year").innerHTML = d.getFullYear();
+    </script>
+
+    <!-- STYLES -->
+    <style type="text/css"></style>
+    <style id="style-1-cropbar-clipper">
+        .en-markup-crop-options {
+            top: 18px !important;
+            left: 50% !important;
+            margin-left: -100px !important;
+            width: 200px !important;
+            border: 2px rgba(255, 255, 255, .38) solid !important;
+            border-radius: 4px !important;
+        }
+
+        .en-markup-crop-options div div:first-of-type {
+            margin-left: 0px !important;
+        }
+
+        .container_table {
+            width: 700px;
+            height: 180px;
+            display: table;
+            border-spacing: 20px 5px;
+            margin: auto;
+        }
+
+
+        frames_row {
+            display: table-row;
+        }
+
+        .frameCell {
+            display: table-cell;
+            width: 33%;
+            height: 40%;
+            text-align: center;
+            vertical-align: bottom;
+        }
+
+        .innerCell:hover {
+            border: solid 1px #F7931E;
+            background-color: #b3f0ff;
+        }
+
+        .innerCell {
+            border: solid 1px #00a3cc;
+            background-color: #e6ffff;
+            text-align: center;
+            vertical-align: middle;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+            height: 80%;
+        }
+
+        a:link {
+            text-decoration: none;
+            color: black;
+        }
+
+        a:visited {
+            text-decoration: none;
+            color: black;
+        }
+
+        a:hover {
+            text-decoration: none;
+            color: black;
+        }
+
+        a:active {
+            text-decoration: none;
+            color: black;
+        }
+
+        .cellTxt {
+            padding: 10px 5px 5px 5px;
+            display: block;
+            font-family: arial;
+            line-height: 130%;
+            vertical-align: middle;
+            color: black;
+        }
+    </style>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 100;
+            /* Sit on top */
+            padding-top: 100px;
+            /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            direction: rtl;
+            font-size: 20px;
+        }
+
+        /* Modal Content */
+        .modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 80%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            direction: rtl;
+            font-size: 20px;
+            animation-duration: 0.4s
+        }
+
+        /* Add Animation */
+        @-webkit-keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        @keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        /* The Close Button */
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-header {
+            padding: 2px 16px;
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        .modal-body {
+            padding: 2px 16px;
+        }
+
+        .modal-footer {
+            padding: 2px 16px;
+            background-color: #5cb85c;
+            color: white;
+        }
+    </style>
+
+</head>
+
+
+<!-- Trigger/Open The Modal -->
+<button id="myBtn" style="display: none;">Open Modal</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h1>מערכת "הרמה להנחתה" (קישור בין לימודי תואר ראשון ושני)</h1>
+        </div>
+        <div class="modal-body">
+
+
+
+            <p> חדש!
+                <br>
+                <br>
+                עמוד זה מותאם גם לשימוש בסלולר/טבאלט.
+                <br>
+                <br>
+                אם הינך גולש בסלולר, נא החזק מכשירך בצורה אופקית.
+                <br>
+                <br>
+
+                <img src=".\rotate-screen.png" alt="rotate-screen icon" style="width: 100px; height: 100px;"> <br>
+                <br> צוות האתר.
+
+        </div>
+        <div class="modal-footer">
+            <h5>
+                <a href="http://kivunim.huji.ac.il/kl4/kl4.html" style="text-decoration-line: underline">לחזרה לעמוד
+                    הבית של מה ללמוד? לחץ כאן </a>
+            </h5>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    document.getElementById("myBtn").click();
+</script>
+
+
+<body id="body">
+    <!-- FORM -->
+    <form method="post" action="./choose_files/choose.html" id="form1">
+        <div class="aspNetHidden">
+            <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE"
+                value="/wEPDwULLTEwOTI1OTYyNzVkZOXJTL0MVdlECJZlTYgzs2jM2/NUu+FQlmpowrDmecSR">
+        </div>
+
+        <div class="aspNetHidden">
+
+            <input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION"
+                value="/wEdAALZl/9H9Af0ZxXoLHK1g8Pl4+3WpZQNb82rzs2KnT3rh3o2YvSEE1p2s5dS1LZkl/NnTY3T/2mO/gD2lisKkQTG">
+        </div>
+
+        <div id="wrapper" class="wrapper">
+
+            <div class="header-bg"></div>
+
+            <div class="header">
+                <div class="logo">
+                    <a href="BAMAsystem.html" style="text-decoration: none">
+                        <img src="../../choose_files/KivunimLogo.png" width="151px" height="85px" border="0" alt=""
+                            title=""></a>
+                </div>
+
+                <div class="menu-header">
+                    <ul id="nav" class="dropdown">
+                        <li>
+                            <table border="0" cellspacing="0" cellpadding="0" dir="rtl" margin="0" width="100%">
+                                <tbody>
+                                    <tr id="row2" style="cursor:pointer;"
+                                        onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;Register.aspx&#39;, &#39;hmenu&#39;,-1);">
+                                    <tr>
+                                        <td class="arrow-down">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        <li>
+                            <table border="0" cellspacing="0" dir="rtl" cellpadding="0" width="100%">
+                                <tbody>
+                                    <tr id="row3" style="cursor:pointer;"
+                                        onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;BAMAinfo.html&#39;, &#39;hmenu&#39;,-1);">
+                                        <td id="td3" class="td-Style td-NotSelected">כדאי לקרוא</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="arrow-down">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        <li>
+                            <table border="0" cellspacing="0" cellpadding="0" dir="rtl" margin="0" width="100%">
+                                <tbody>
+                                    <tr id="row4" style="cursor:pointer;"
+                                        onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;BA_to_MA.html&#39;, &#39;hmenu&#39;,-1);">
+                                        <td id="td4" class="td-Style td-NotSelected">מתואר ראשון לשני</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="arrow-down">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        <li>
+                            <table border="0" cellspacing="0" cellpadding="0" dir="rtl" margin="0" width="100%">
+                                <tbody>
+                                    <tr id="row5" style="cursor:pointer;"
+                                        onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;MA_to_BA.html&#39;, &#39;hmenu&#39;,-1);">
+                                        <td id="td5" class="td-Style tdLast-NotSelected">מה מוביל לתואר שני בתחום
+
+                                            שמעניין אותי?</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="arrow-down">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        <li>
+                            <table border="0" cellspacing="0" dir="rtl" cellpadding="0" width="100%">
+                                <tbody>
+                                    <tr id="row7" style="cursor:pointer;"
+                                        onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;kl4_table.html&#39;, &#39;hmenu&#39;,-1);">
+
+                                    <tr>
+                                        <td class="arrow-down">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <ul onmouseover="SetParentBG(td7, &#39;white&#39;, &#39;td-Selected&#39;);"
+                                onmouseout="SetParentBG(td7, &#39;&#39;, &#39;td-NotSelected&#39;); ">
+                            </ul>
+                        </li>
+                        <li>
+                            <table border="0" cellspacing="0" cellpadding="0" dir="rtl" margin="0" width="100%">
+                                <tbody>
+                                    <tr id="row8" style="cursor:pointer;"
+                                        onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;kl4_feedback.html&#39;, &#39;hmenu&#39;,-1);">
+                                    <tr>
+                                        <td class="arrow-down">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                    </ul>
+                </div>
+                </ul>
+                </li>
+                </ul>
+            </div>
+
+            <div class="content" style="text-align:center;overflow:hidden;margin-top: 10px;">
+
+                <div><img src="BAMAsystem.png" width="450" height="150"></div>
+                <div style="color: #ff9900; width:50%; text-align: center; height: auto; margin:auto;" class="text">
+                    <span class="text"
+                        style="line-height: 100%;position: relative;top: 0px;font-size: 13px; color:black;">
+                        <h3 style="text-align: justify; text-justify: inter-word;">
+                            כאשר פונים ללימודים לתואר שני, ישנן דרישות מסוימות על מנת לעמוד בתנאי הקבלה, כשאחת מהן היא
+                            לימודי תואר ראשון בתחום לימודים מסוים.
+                            <br>
+                            מערכת זו מיועדת לתת מידע על הקשר שבין תחומי לימוד
+                            לתואר ראשון לתחומי לימוד לתואר שני.
+
+                        </h3>
+
+                        <h2 style="font-size: 200%;"><b>במה נוכל לעזור לך?</b></h2>
+                    </span>
+                </div>
+
+                <div class="container_table">
+                    <!-- <div class="frameCell">
+                        <a href="MA_to_BA.html">
+                            <div class="innerCell"><span class="cellTxt">יש לי ענין במסלול לימודים לתואר שני ואשמח לדעת
+                                    מהם תחומי הלימוד לתואר ראשון שיסייעו לי להגיע אליו</span></div>
+                        </a>
+                    </div> -->
+
+                    <!-- <div class="frameCell">
+                        <a href="BA_to_MA.html">
+                            <div class="innerCell"><span class="cellTxt">אני כבר לומד/ת לתואר ראשון ואשמח לדעת מהם תחומי
+                                    הלימוד לתואר שני שניתן ללמוד לאחר סיום התואר הראשון בתחום שאני לומד/ת</span></div>
+                        </a>
+                    </div> -->
+
+                    <!-- <div class="frameCell">
+                        <a href="BA_to_MA.html">
+                            <div class="innerCell"><span class="cellTxt">יש לי ענין בתחום לימודים מסוים לתואר ראשון
+                                    ואשמח לדעת מהם תחומי הלימוד לתואר שני שניתן ללמוד לאחר סיום התואר הראשון בתחום
+                                    הזה</span></div>
+                        </a>
+                    </div> -->
+
+                    <div>
+                        <a href="BA_to_MA.html">
+                            <img src=".\BA2MA.png" alt="BA2MA" width="208.9" height="138.78">
+                        </a>
+                    </div>
+
+                    <div>
+                        <a href="MA_to_BA.html">
+                            <img src=".\MA2BA.png" alt="MA2BA" width="208.9" height="138.78">
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="footer-bg"></div>
+            <div class="footer">
+                <div class="footer-r" dir="rtl">
+                    <div class="footer-text">
+                        <div class="footer-menu">
+                            <ul id="nav" class="dropdown">
+                                <li>
+                                    <table border="0" cellspacing="0" cellpadding="0" margin="0" width="100%">
+                                        <tbody>
+                                            <tr id="row8" style="cursor:pointer;"
+                                                onclick="goto(&#39;page&#39;, &#39;id&#39; ,&#39;../kl4_mianachnu.html&#39;, &#39;hmenu&#39;,-1);">
+                                                <td id="td8" class="tdLast-NotSelected"><b>מי אנחנו</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="arrow-down">&nbsp;</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </li>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="footer_allRights_Reserved" style="align-items:left;">
+
+                    <span class="footer-text">
+                        כל הזכויות שמורות לכיוונים לעתיד </a><span id="year"></span>&nbsp;©&nbsp;
+                </div>
+            </div>
+        </div>
+        </div>
+
+    </form>
+
+
+    <iframe id="iagdtd_frame" src="./choose_files/410.html"
+        style="position: absolute; width: 1px; height: 1px; left: -9999px;"></iframe>
+</body>
+
+
+
+</html>
+
+</html>
