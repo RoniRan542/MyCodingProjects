@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "snake.hpp"
+#include "board.hpp"
 
 enum Level
 {
@@ -19,6 +20,7 @@ public:
 
 private:
     Snake *m_snake;
+    Board *m_board;
 };
 
 Game::Game(enum Level level)
