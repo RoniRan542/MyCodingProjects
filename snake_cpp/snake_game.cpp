@@ -36,7 +36,7 @@ int main(void)
         {
             for (const Square &blk : vector)
             {
-                Rectangle rec = {blk.m_down_left.first, blk.m_down_left.second, 80, 80};
+                Rectangle rec = {(blk.GetDLPoint()).first, (blk.GetDLPoint()).second, 80, 80};
                 if (alternate)
                 {
                     DrawRectangleRec(rec, RED);
