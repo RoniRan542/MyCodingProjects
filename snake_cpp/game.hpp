@@ -13,20 +13,13 @@ enum Level
 class Game
 {
 public:
-    Game(enum Level level = BEGINNER);
+    Game(float screenWidth, float screenHeight, enum Level level = BEGINNER);
     void StartGame();
 
     ~Game();
 
 private:
-    Snake *m_snake;
     Board *m_board;
+    Snake *m_snake;
+    enum Level m_level;
 };
-
-Game::Game(enum Level level)
-{
-}
-
-Game::~Game()
-{
-}

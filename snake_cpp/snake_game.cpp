@@ -1,5 +1,7 @@
 #include "/home/rani/raylib/src/raylib.h"
 #include "board.hpp"
+#include "square.hpp"
+#include "snake.hpp"
 
 int main(void)
 {
@@ -13,6 +15,7 @@ int main(void)
     Board board(80, 80, screenWidth, screenHeight);
     bool alternate = false;
     std::vector<std::vector<Square>> bo(board.GetBoard());
+    Snake snake(bo[0][0]);
 
     SetTargetFPS(10);
     Camera2D camera;
@@ -56,6 +59,15 @@ int main(void)
             {
                 alternate = true;
             }
+        }
+
+        std::list<Square> snake_list = snake.GetSnake();
+        std::list<Square>::iterator snake_it = snake_list.begin();
+
+        for (; snake_it != snake_list.end(); snake_it++)
+        {
+            Rectangle rec = {snake_it->GetDLPoint().first, snake_it->GetDLPoint().second, 80, 80};
+            DrawRectangleRec(rec, BROWN);
         }
 
         EndMode2D();

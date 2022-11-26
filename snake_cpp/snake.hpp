@@ -1,32 +1,35 @@
+#ifndef __SNAKE_HPP__
+#define __SNAKE_HPP__
+
 #include <iostream>
+#include <list>
+
+#include "board.hpp"
+#include "square.hpp"
 
 enum Directions
 {
-    Up,
-    Right,
-    Down,
-    Left
+    UP,
+    RIGHT,
+    DOWN,
+    LEFT
 };
 
 class Snake
 {
 
 public:
-    Snake(int init_len, float x = 0, float y = 0);
+    Snake(const Square &head, int init_len = 3,
+          uint32_t block_len = 80);
     void ChangeDirection(enum Directions direction);
     void EnlargeSnake();
-    ~Snake();
+    std::list<Square> &GetSnake();
 
 private:
     int m_length;
-    std::pair<float, float> m_position;
+    u_int32_t m_block_len;
+    std::list<Square> m_snake;
     enum Directions m_direction;
 };
 
-Snake::Snake(int init_len, float x, float y)
-{
-}
-
-Snake::~Snake()
-{
-}
+#endif //__SNAKE_HPP__
