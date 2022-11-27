@@ -19,16 +19,15 @@ class Snake
 {
 
 public:
-    Snake(const Square &head, int init_len = 3,
-          uint32_t block_len = 80);
+    Snake(const std::pair<uint32_t, uint32_t> &head, int init_len = 3);
     void ChangeDirection(enum Directions direction);
     void EnlargeSnake();
-    std::list<Square> &GetSnake();
+    const std::list<std::pair<uint32_t, uint32_t>> &GetSnake();
+    int UpdateSnakePos();
 
 private:
     int m_length;
-    u_int32_t m_block_len;
-    std::list<Square> m_snake;
+    std::list<std::pair<uint32_t, uint32_t>> m_snake;
     enum Directions m_direction;
 };
 

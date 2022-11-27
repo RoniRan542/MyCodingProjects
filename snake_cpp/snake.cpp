@@ -4,26 +4,57 @@
 
 #include "snake.hpp"
 
-Snake::Snake(const Square &head, int init_len,
-             uint32_t block_len) : m_length(init_len), m_block_len(block_len), m_direction(RIGHT)
+Snake::Snake(const std::pair<uint32_t, uint32_t> &head, int init_len) : m_length(init_len), m_direction(RIGHT)
 {
-    std::pair<uint32_t, uint32_t> lower_point = head.GetDLPoint();
-    std::pair<uint32_t, uint32_t> upper_point = head.GetURPoint();
-    for (size_t i = 0; i < m_length; ++i, lower_point.first += m_block_len, upper_point.first += m_block_len)
+    m_snake.push_front(head);
+    for (size_t i = 0; i < m_length; ++i)
     {
-        m_snake.push_front(Square(lower_point, upper_point));
+        m_snake.push_front(std::pair<uint32_t, uint32_t>(head.first - i, head.second));
     }
 }
 
-std::list<Square> &Snake::GetSnake()
+const std::list<std::pair<uint32_t, uint32_t>> &Snake::GetSnake()
 {
     return m_snake;
 }
 
+int Snake::UpdateSnakePos()
+{
+    std::pair<uint32_t, uint32_t> new_section;
+    std::pair<uint32_t, uint32_t> head = m_snake.front();
+    if (RIGHT == m_direction)
+    {
+        new_section.first = (head.first + 1) % 16;
+        new_section.second = (head.second) % 16;
+    }
+    else if (LEFT == m_direction)
+    {
+        new_section.first = (head.first - 1) % 16;
+        new_section.second = (head.second) % 16;
+    }
+    else if (DOWN == m_direction)
+    {
+        new_section.first = (head.first) % 16;
+        new_section.second = (head.second + 1) % 16;
+    }
+    if (UP == m_direction)
+    {
+        new_section.first = (head.first) % 16;
+        new_section.second = (head.second - 1) % 16;
+    }
+
+    m_snake.push_front(new_section);
+    m_snake.pop_back();
+
+    return 0;
+}
+
 void Snake::ChangeDirection(enum Directions direction)
 {
+    m_direction = direction;
 }
 
 void Snake::EnlargeSnake()
 {
+    m_snake.push_back(m_snake.back());
 }

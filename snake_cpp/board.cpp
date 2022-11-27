@@ -1,9 +1,16 @@
+#include <iostream>
+#include <list>
+#include <cstdlib>
+#include <iostream>
+#include <algorithm>
+#include <ctime>
 
 #include "board.hpp"
 
 Board::Board(uint32_t block_width, uint32_t block_height, uint32_t window_width, uint32_t window_height)
 {
     Init(block_width, block_height, window_width, window_height);
+    m_block_width = block_width;
 }
 
 void Board::Init(uint32_t block_width, uint32_t block_height, uint32_t window_width, uint32_t window_height)
@@ -15,6 +22,7 @@ void Board::Init(uint32_t block_width, uint32_t block_height, uint32_t window_wi
     {
         board_squares_2d[i].resize((window_height / block_height));
     }
+
     std::pair<uint32_t, uint32_t> lower_point = {0, 0};
     std::pair<uint32_t, uint32_t> upper_point = {block_height, block_width};
 
@@ -32,4 +40,26 @@ void Board::Init(uint32_t block_width, uint32_t block_height, uint32_t window_wi
 std::vector<std::vector<Square>> &Board::GetBoard()
 {
     return board_squares_2d;
+}
+
+void Board::SetFood(const std::list<std::pair<uint32_t, uint32_t>> &snake_list)
+{
+    std::size_t limit = board_squares_2d.size();
+    std::srand(std::time(nullptr));
+    uint32_t x = std::rand() % limit;
+    uint32_t y = std::rand() % limit;
+
+    while (std::find(snake_list.begin(), snake_list.end(), std::pair<uint32_t, uint32_t>(x, y)) != snake_list.end())
+    {
+        x = std::rand() % limit;
+        y = std::rand() % limit;
+        std::cout << x << " " << y << std::endl;
+    }
+
+    m_food = std::pair<uint32_t, uint32_t>(x, y);
+}
+
+std::pair<uint32_t, uint32_t> Board::GetFood()
+{
+    return m_food;
 }
