@@ -1,3 +1,6 @@
+#include <thread>
+#include <chrono>
+
 #include "/home/rani/raylib/src/raylib.h"
 #include "board.hpp"
 #include "square.hpp"
@@ -30,52 +33,68 @@ int main(void)
 
     while (!WindowShouldClose())
     {
-        std::list<std::pair<uint32_t, uint32_t>> snake_list = snake.GetSnake();
-        std::list<std::pair<uint32_t, uint32_t>>::iterator snake_it = snake_list.begin();
-
-        if (IsKeyPressed(KEY_UP))
+        try
         {
-            snake.ChangeDirection(UP);
+            std::list<std::pair<uint32_t, uint32_t>> snake_list = snake.GetSnake();
+            std::list<std::pair<uint32_t, uint32_t>>::iterator snake_it = snake_list.begin();
+
+            if (IsKeyPressed(KEY_UP))
+            {
+                snake.ChangeDirection(UP);
+            }
+            else if (IsKeyPressed(KEY_DOWN))
+            {
+                snake.ChangeDirection(DOWN);
+            }
+            else if (IsKeyPressed(KEY_LEFT))
+            {
+                snake.ChangeDirection(LEFT);
+            }
+            else if (IsKeyPressed(KEY_RIGHT))
+            {
+                snake.ChangeDirection(RIGHT);
+            }
+
+            snake.UpdateSnakePos();
+            snake_list = snake.GetSnake();
+
+            if (snake_list.front() == board.GetFood())
+            {
+                snake.EnlargeSnake();
+                board.SetFood(snake_list);
+            }
+
+            BeginDrawing();
+            ClearBackground(BLUE);
+
+            BeginMode2D(camera);
+
+            for (; snake_it != snake_list.end(); snake_it++)
+            {
+                Rectangle rec = {bo[snake_it->first][snake_it->second].GetDLPoint().first, bo[snake_it->first][snake_it->second].GetDLPoint().second, 60, 60};
+                DrawRectangleRec(rec, BLACK);
+            }
+
+            Rectangle rec = {bo[board.GetFood().first][board.GetFood().second].GetDLPoint().first, bo[board.GetFood().first][board.GetFood().second].GetDLPoint().second, 60, 60};
+            DrawRectangleRec(rec, GREEN);
+
+            EndMode2D();
+
+            EndDrawing();
         }
-        else if (IsKeyPressed(KEY_DOWN))
+        catch (const std::exception &e)
         {
-            snake.ChangeDirection(DOWN);
+            BeginDrawing();
+            ClearBackground(BLUE);
+
+            BeginMode2D(camera);
+            DrawText("GAME OVER! ", screenWidth / 3, screenHeight / 2, 80, DARKPURPLE);
+            EndMode2D();
+
+            EndDrawing();
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            exit(0);
         }
-        else if (IsKeyPressed(KEY_LEFT))
-        {
-            snake.ChangeDirection(LEFT);
-        }
-        else if (IsKeyPressed(KEY_RIGHT))
-        {
-            snake.ChangeDirection(RIGHT);
-        }
-
-        snake.UpdateSnakePos();
-        snake_list = snake.GetSnake();
-
-        if (snake_list.front() == board.GetFood())
-        {
-            snake.EnlargeSnake();
-            board.SetFood(snake_list);
-        }
-
-        BeginDrawing();
-        ClearBackground(BLUE);
-
-        BeginMode2D(camera);
-
-        for (; snake_it != snake_list.end(); snake_it++)
-        {
-            Rectangle rec = {bo[snake_it->first][snake_it->second].GetDLPoint().first, bo[snake_it->first][snake_it->second].GetDLPoint().second, 60, 60};
-            DrawRectangleRec(rec, BLACK);
-        }
-
-        Rectangle rec = {bo[board.GetFood().first][board.GetFood().second].GetDLPoint().first, bo[board.GetFood().first][board.GetFood().second].GetDLPoint().second, 60, 60};
-        DrawRectangleRec(rec, GREEN);
-
-        EndMode2D();
-
-        EndDrawing();
     }
 
     CloseWindow();

@@ -27,7 +27,6 @@ int Snake::UpdateSnakePos()
     {
         if ((head.first + 1) % 16 == 0)
         {
-            std::cout << "head.first: " << head.first << "head.second: " << head.second << std::endl;
             throw std::runtime_error("GAME OVER! \n");
         }
 
@@ -39,7 +38,6 @@ int Snake::UpdateSnakePos()
     {
         if (((head.first) == 0))
         {
-            std::cout << "head.first: " << head.first << "head.second: " << head.second << std::endl;
             throw std::runtime_error("GAME OVER! \n");
         }
         new_section.first = (head.first - 1);
@@ -50,7 +48,6 @@ int Snake::UpdateSnakePos()
 
         if ((head.second + 1) % 16 == 0)
         {
-            std::cout << "head.first: " << head.first << "head.second: " << head.second << std::endl;
             throw std::runtime_error("GAME OVER! \n");
         }
         new_section.first = (head.first);
@@ -60,7 +57,6 @@ int Snake::UpdateSnakePos()
     {
         if ((head.second) == 0)
         {
-            std::cout << "head.first: " << head.first << "head.second: " << head.second << std::endl;
             throw std::runtime_error("GAME OVER! \n");
         }
 
