@@ -7,8 +7,8 @@ int main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 1000;
-    const int screenHeight = 1000;
+    const int screenWidth = 960;
+    const int screenHeight = 960;
 
     InitWindow(screenWidth, screenHeight, "Snake");
 
@@ -19,10 +19,10 @@ int main(void)
     board.SetFood(snake.GetSnake());
     SetTargetFPS(10);
     Camera2D camera;
-    camera.offset.x = 0;
-    camera.offset.y = 0;
-    camera.target.x = 60;
-    camera.target.y = 60;
+    camera.offset.x = -60;
+    camera.offset.y = -60;
+    camera.target.x = 0;
+    camera.target.y = 0;
     camera.rotation = 0;
     camera.zoom = 1;
 
@@ -30,35 +30,8 @@ int main(void)
 
     while (!WindowShouldClose())
     {
-        BeginDrawing();
-        ClearBackground(LIGHTGRAY);
-
-        BeginMode2D(camera);
-
-        /*         for (const std::vector<Square> &vector : bo)
-                {
-                    for (const Square &blk : vector)
-                    {
-                        Rectangle rec = {(blk.GetDLPoint()).first, (blk.GetDLPoint()).second, 60, 60};
-                        DrawRectangleRec(rec, LIGHTGRAY);
-                    }
-                } */
-        /* bool m_is_eaten; */
         std::list<std::pair<uint32_t, uint32_t>> snake_list = snake.GetSnake();
         std::list<std::pair<uint32_t, uint32_t>>::iterator snake_it = snake_list.begin();
-
-        for (; snake_it != snake_list.end(); snake_it++)
-        {
-            Rectangle rec = {bo[snake_it->first][snake_it->second].GetDLPoint().first, bo[snake_it->first][snake_it->second].GetDLPoint().second, 60, 60};
-            DrawRectangleRec(rec, BLACK);
-        }
-
-        Rectangle rec = {bo[board.GetFood().first][board.GetFood().second].GetDLPoint().first, bo[board.GetFood().first][board.GetFood().second].GetDLPoint().second, 60, 60};
-        DrawRectangleRec(rec, GREEN);
-
-        EndMode2D();
-
-        EndDrawing();
 
         if (IsKeyPressed(KEY_UP))
         {
@@ -85,6 +58,24 @@ int main(void)
             snake.EnlargeSnake();
             board.SetFood(snake_list);
         }
+
+        BeginDrawing();
+        ClearBackground(BLUE);
+
+        BeginMode2D(camera);
+
+        for (; snake_it != snake_list.end(); snake_it++)
+        {
+            Rectangle rec = {bo[snake_it->first][snake_it->second].GetDLPoint().first, bo[snake_it->first][snake_it->second].GetDLPoint().second, 60, 60};
+            DrawRectangleRec(rec, BLACK);
+        }
+
+        Rectangle rec = {bo[board.GetFood().first][board.GetFood().second].GetDLPoint().first, bo[board.GetFood().first][board.GetFood().second].GetDLPoint().second, 60, 60};
+        DrawRectangleRec(rec, GREEN);
+
+        EndMode2D();
+
+        EndDrawing();
     }
 
     CloseWindow();

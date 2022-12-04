@@ -1,6 +1,7 @@
 
 
 #include <iostream>
+#include <exception>
 
 #include "snake.hpp"
 
@@ -24,23 +25,47 @@ int Snake::UpdateSnakePos()
     std::pair<uint32_t, uint32_t> head = m_snake.front();
     if (RIGHT == m_direction)
     {
-        new_section.first = (head.first + 1) % 16;
-        new_section.second = (head.second) % 16;
+        if ((head.first + 1) % 16 == 0)
+        {
+            std::cout << "head.first: " << head.first << "head.second: " << head.second << std::endl;
+            throw std::runtime_error("GAME OVER! \n");
+        }
+
+        new_section.first = (head.first + 1);
+        new_section.second = (head.second);
     }
     else if (LEFT == m_direction)
+
     {
-        new_section.first = (head.first - 1) % 16;
-        new_section.second = (head.second) % 16;
+        if (((head.first) == 0))
+        {
+            std::cout << "head.first: " << head.first << "head.second: " << head.second << std::endl;
+            throw std::runtime_error("GAME OVER! \n");
+        }
+        new_section.first = (head.first - 1);
+        new_section.second = (head.second);
     }
     else if (DOWN == m_direction)
     {
-        new_section.first = (head.first) % 16;
-        new_section.second = (head.second + 1) % 16;
+
+        if ((head.second + 1) % 16 == 0)
+        {
+            std::cout << "head.first: " << head.first << "head.second: " << head.second << std::endl;
+            throw std::runtime_error("GAME OVER! \n");
+        }
+        new_section.first = (head.first);
+        new_section.second = (head.second + 1);
     }
     if (UP == m_direction)
     {
-        new_section.first = (head.first) % 16;
-        new_section.second = (head.second - 1) % 16;
+        if ((head.second) == 0)
+        {
+            std::cout << "head.first: " << head.first << "head.second: " << head.second << std::endl;
+            throw std::runtime_error("GAME OVER! \n");
+        }
+
+        new_section.first = (head.first);
+        new_section.second = (head.second - 1);
     }
 
     m_snake.push_front(new_section);
