@@ -2,15 +2,15 @@
 
 #include <iostream>
 #include <exception>
+#include <algorithm>
 
 #include "snake.hpp"
 
 Snake::Snake(const std::pair<uint32_t, uint32_t> &head, int init_len) : m_length(init_len), m_direction(RIGHT)
 {
-    m_snake.push_front(head);
     for (size_t i = 0; i < m_length; ++i)
     {
-        m_snake.push_front(std::pair<uint32_t, uint32_t>(head.first - i, head.second));
+        m_snake.push_back(std::pair<uint32_t, uint32_t>(head.first - i, head.second));
     }
 }
 
@@ -62,6 +62,11 @@ int Snake::UpdateSnakePos()
 
         new_section.first = (head.first);
         new_section.second = (head.second - 1);
+    }
+
+    if (std::find(m_snake.begin(), m_snake.end(), std::pair<uint32_t, uint32_t>(new_section.first, new_section.second)) != m_snake.end())
+    {
+        throw std::runtime_error("GAME OVER! \n");
     }
 
     m_snake.push_front(new_section);

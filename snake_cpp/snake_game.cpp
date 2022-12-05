@@ -88,7 +88,7 @@ int main(void)
             ClearBackground(BLUE);
 
             BeginMode2D(camera);
-            DrawText("GAME OVER! ", screenWidth / 3, screenHeight / 2, 80, DARKPURPLE);
+            DrawText("GAME OVER! ", (screenWidth * 2) / 7, screenHeight / 2, 80, DARKPURPLE);
             EndMode2D();
 
             EndDrawing();
