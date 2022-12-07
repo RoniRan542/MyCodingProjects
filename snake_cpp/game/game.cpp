@@ -1,25 +1,27 @@
+#include <iostream>
 #include <thread>
 #include <chrono>
 
 #include "/home/rani/raylib/src/raylib.h"
+#include "game.hpp"
 #include "board.hpp"
 #include "square.hpp"
 #include "snake.hpp"
 
-int main(void)
+Game::Game(float screenWidth, float screenHeight, enum Level level)
+    : m_board(new Board(60, 60, screenWidth, screenHeight)),
+      m_snake(new Snake(std::pair<uint32_t, uint32_t>(7, 7), 3)),
+      m_screenWidth(screenWidth),
+      m_screenHeight(screenHeight),
+      m_level(level)
 {
-    // Initialization
-    //--------------------------------------------------------------------------------------
-    const int screenWidth = 960;
-    const int screenHeight = 960;
+    m_board->SetFood(m_snake->GetSnake());
+}
 
-    InitWindow(screenWidth, screenHeight, "Snake");
-
-    Board board(60, 60, screenWidth, screenHeight);
-    bool alternate = false;
-    std::vector<std::vector<Square>> bo(board.GetBoard());
-    Snake snake(std::pair<uint32_t, uint32_t>(7, 7), 3);
-    board.SetFood(snake.GetSnake());
+void Game::StartGame()
+{
+    std::vector<std::vector<Square>> bo(m_board->GetBoard());
+    InitWindow(m_screenWidth, m_screenHeight, "Snake");
     SetTargetFPS(10);
     Camera2D camera;
     camera.offset.x = -60;
@@ -29,53 +31,49 @@ int main(void)
     camera.rotation = 0;
     camera.zoom = 1;
 
-    int i = 0, j = 0;
-
     while (!WindowShouldClose())
     {
         try
         {
-            std::list<std::pair<uint32_t, uint32_t>> snake_list = snake.GetSnake();
+            std::list<std::pair<uint32_t, uint32_t>> snake_list = m_snake->GetSnake();
             std::list<std::pair<uint32_t, uint32_t>>::iterator snake_it = snake_list.begin();
 
             if (IsKeyPressed(KEY_UP))
             {
-                snake.ChangeDirection(UP);
+                m_snake->ChangeDirection(UP);
             }
             else if (IsKeyPressed(KEY_DOWN))
             {
-                snake.ChangeDirection(DOWN);
+                m_snake->ChangeDirection(DOWN);
             }
             else if (IsKeyPressed(KEY_LEFT))
             {
-                snake.ChangeDirection(LEFT);
+                m_snake->ChangeDirection(LEFT);
             }
             else if (IsKeyPressed(KEY_RIGHT))
             {
-                snake.ChangeDirection(RIGHT);
+                m_snake->ChangeDirection(RIGHT);
             }
 
-            snake.UpdateSnakePos();
-            snake_list = snake.GetSnake();
-
-            if (snake_list.front() == board.GetFood())
+            m_snake->UpdateSnakePos();
+            snake_list = m_snake->GetSnake();
+            if (snake_list.front() == m_board->GetFood())
             {
-                snake.EnlargeSnake();
-                board.SetFood(snake_list);
+                m_snake->EnlargeSnake();
+                m_board->SetFood(snake_list);
             }
 
             BeginDrawing();
             ClearBackground(BLUE);
 
             BeginMode2D(camera);
-
             for (; snake_it != snake_list.end(); snake_it++)
             {
                 Rectangle rec = {bo[snake_it->first][snake_it->second].GetDLPoint().first, bo[snake_it->first][snake_it->second].GetDLPoint().second, 60, 60};
                 DrawRectangleRec(rec, BLACK);
             }
 
-            Rectangle rec = {bo[board.GetFood().first][board.GetFood().second].GetDLPoint().first, bo[board.GetFood().first][board.GetFood().second].GetDLPoint().second, 60, 60};
+            Rectangle rec = {bo[m_board->GetFood().first][m_board->GetFood().second].GetDLPoint().first, bo[m_board->GetFood().first][m_board->GetFood().second].GetDLPoint().second, 60, 60};
             DrawRectangleRec(rec, GREEN);
 
             EndMode2D();
@@ -88,7 +86,7 @@ int main(void)
             ClearBackground(BLUE);
 
             BeginMode2D(camera);
-            DrawText("GAME OVER! ", (screenWidth * 2) / 7, screenHeight / 2, 80, DARKPURPLE);
+            DrawText("GAME OVER! ", (m_screenWidth * 2) / 7, m_screenHeight / 2, 80, DARKPURPLE);
             EndMode2D();
 
             EndDrawing();
@@ -96,8 +94,12 @@ int main(void)
             exit(0);
         }
     }
+}
 
-    CloseWindow();
-
-    return 0;
+Game::~Game()
+{
+    delete m_board;
+    m_board = 0;
+    delete m_snake;
+    m_snake = 0;
 }
