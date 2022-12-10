@@ -18,8 +18,8 @@ int main(void)
     std::vector<std::vector<Square>> bo(board.GetBoard());
     SetTargetFPS(2);
     Camera2D camera;
-    camera.offset.x = 0;
-    camera.offset.y = 0;
+    camera.offset.x = -120;
+    camera.offset.y = -120;
     camera.target.x = 0;
     camera.target.y = 0;
     camera.rotation = 0;
@@ -36,7 +36,7 @@ int main(void)
             for (size_t j = 0; j < 8; ++j)
             {
                 Rectangle rec = {bo[i][j].GetDLPoint().first, bo[i][j].GetDLPoint().second, 120, 120};
-                if (alternate)
+                if (alternate == true)
                 {
                     DrawRectangleRec(rec, WHITE);
                     alternate = false;
@@ -47,8 +47,26 @@ int main(void)
                     alternate = true;
                 }
             }
+            alternate = alternate == true ? false : true;
         }
 
+        // std::cout << bo[i][j].GetDLPoint().first << ", " << bo[i][j].GetDLPoint().second << std::endl;
+
+        for (size_t j = 0; j < 2; j++)
+        {
+            for (size_t i = 0; i < 8; i++)
+            {
+                DrawCircle(bo[i][j].GetDLPoint().first + 60, bo[i][j].GetDLPoint().second + 60, 55, BLACK);
+            }
+        }
+
+        for (size_t j = 6; j < 8; j++)
+        {
+            for (size_t i = 0; i < 8; i++)
+            {
+                DrawCircle(bo[i][j].GetDLPoint().first + 60, bo[i][j].GetDLPoint().second + 60, 55, LIGHTGRAY);
+            }
+        }
         EndMode2D();
         EndDrawing();
     }
