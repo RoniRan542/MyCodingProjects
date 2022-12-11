@@ -13,7 +13,7 @@ class Game
 {
 public:
     explicit Game(std::string p_name1 = "player 1", std::string p_name2 = "player 2");
-    void StartGame();
+    void PlayTurn();
     bool IsValidMove(Pawn pawn, std::pair<u_int32_t, u_int32_t>);
     Board GetBoard() const;
     std::vector<Player> GetPlayers() const;
@@ -21,6 +21,7 @@ public:
 private:
     std::vector<Player> m_players;
     Board m_board;
+    int m_curr_player;
 };
 
 #endif // __GAEM_HPP__

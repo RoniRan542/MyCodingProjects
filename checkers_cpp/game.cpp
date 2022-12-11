@@ -7,8 +7,12 @@ Game::Game(std::string p_name1, std::string p_name2)
     m_players.push_back(p1);
     m_players.push_back(p2);
 }
-void Game::StartGame()
+void Game::PlayTurn()
 {
+    std::cout << "player is: " << m_curr_player << std::endl;
+    m_players[!!m_curr_player]
+        .Move();
+    m_curr_player = !m_curr_player;
 }
 /* void PlayerMove(Player plyr, Pawn &pawn, enum Direction dir, int steps);
 void PlayerCapture(Player plyr, Pawn &pawn, enum Direction dir, int steps); */

@@ -10,6 +10,7 @@ public:
     explicit Pawn(std::pair<u_int32_t, u_int32_t> init_pos);
     // virtual void GoToPos(u_int32_t x, u_int32_t y);
     std::pair<u_int32_t, u_int32_t> GetPosition() const;
+    void SetPosition(std::pair<u_int32_t, u_int32_t> new_pos);
     //  virtual void Capture(enum Direction dir);
 
 private:

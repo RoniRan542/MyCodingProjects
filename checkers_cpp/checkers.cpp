@@ -6,6 +6,14 @@
 #include "square.hpp"
 #include "player.hpp"
 
+int GameLoop()
+{
+    std::thread thread;
+    while (!WindowShouldClose())
+    {
+        }
+}
+
 int main(void)
 {
     // Initialization
@@ -18,7 +26,7 @@ int main(void)
     Board board = game.GetBoard();
     bool alternate = false;
     std::vector<std::vector<Square>> bo(board.GetBoard());
-    SetTargetFPS(2);
+    SetTargetFPS(1);
     Camera2D camera;
     camera.offset.x = -120;
     camera.offset.y = -120;
@@ -28,7 +36,7 @@ int main(void)
     camera.zoom = 1;
     // make players
     // make
-
+    std::thread thread;
     while (!WindowShouldClose())
     {
         BeginDrawing();
@@ -67,22 +75,7 @@ int main(void)
                            bo[coordinates.first][coordinates.second].GetDLPoint().second + 60, 55, CLITERAL(color));
             }
         }
-        /*
-                for (size_t j = 0; j < 2; j++)
-                {
-                    for (size_t i = 0; i < 8; i++)
-                    {
-                        DrawCircle(bo[i][j].GetDLPoint().first + 60, bo[i][j].GetDLPoint().second + 60, 55, BLACK);
-                    }
-                }
 
-                for (size_t j = 6; j < 8; j++)
-                {
-                    for (size_t i = 0; i < 8; i++)
-                    {
-                        DrawCircle(bo[i][j].GetDLPoint().first + 60, bo[i][j].GetDLPoint().second + 60, 55, LIGHTGRAY);
-                    }
-                } */
         EndMode2D();
         EndDrawing();
     }
