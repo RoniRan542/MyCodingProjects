@@ -1,9 +1,10 @@
 #include <thread>
 #include <chrono>
 
-#include "/home/rani/raylib/src/raylib.h"
 #include "board.hpp"
+#include "game.hpp"
 #include "square.hpp"
+#include "player.hpp"
 
 int main(void)
 {
@@ -13,7 +14,8 @@ int main(void)
     const int screenHeight = 960;
     InitWindow(screenWidth, screenHeight, "Damka");
 
-    Board board;
+    Game game;
+    Board board = game.GetBoard();
     bool alternate = false;
     std::vector<std::vector<Square>> bo(board.GetBoard());
     SetTargetFPS(2);
@@ -24,6 +26,8 @@ int main(void)
     camera.target.y = 0;
     camera.rotation = 0;
     camera.zoom = 1;
+    // make players
+    // make
 
     while (!WindowShouldClose())
     {
@@ -51,22 +55,34 @@ int main(void)
         }
 
         // std::cout << bo[i][j].GetDLPoint().first << ", " << bo[i][j].GetDLPoint().second << std::endl;
-
-        for (size_t j = 0; j < 2; j++)
+        size_t counter = 0;
+        for (auto const &player : game.GetPlayers())
         {
-            for (size_t i = 0; i < 8; i++)
+            std::cout << counter++ << std::endl;
+            auto color = player.GetColor();
+            for (auto const &pawn : player.GetPawns())
             {
-                DrawCircle(bo[i][j].GetDLPoint().first + 60, bo[i][j].GetDLPoint().second + 60, 55, BLACK);
+                std::pair<u_int32_t, u_int32_t> coordinates = pawn.GetPosition();
+                DrawCircle(bo[coordinates.first][coordinates.second].GetDLPoint().first + 60,
+                           bo[coordinates.first][coordinates.second].GetDLPoint().second + 60, 55, CLITERAL(color));
             }
         }
+        /*
+                for (size_t j = 0; j < 2; j++)
+                {
+                    for (size_t i = 0; i < 8; i++)
+                    {
+                        DrawCircle(bo[i][j].GetDLPoint().first + 60, bo[i][j].GetDLPoint().second + 60, 55, BLACK);
+                    }
+                }
 
-        for (size_t j = 6; j < 8; j++)
-        {
-            for (size_t i = 0; i < 8; i++)
-            {
-                DrawCircle(bo[i][j].GetDLPoint().first + 60, bo[i][j].GetDLPoint().second + 60, 55, LIGHTGRAY);
-            }
-        }
+                for (size_t j = 6; j < 8; j++)
+                {
+                    for (size_t i = 0; i < 8; i++)
+                    {
+                        DrawCircle(bo[i][j].GetDLPoint().first + 60, bo[i][j].GetDLPoint().second + 60, 55, LIGHTGRAY);
+                    }
+                } */
         EndMode2D();
         EndDrawing();
     }
