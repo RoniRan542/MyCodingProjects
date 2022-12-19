@@ -39,18 +39,11 @@ Color Player::GetColor() const
     return m_color;
 }
 
-void Player::Move()
+void Player::Move(int row, int col)
 {
-    std::string pawn;
-    std::string pos;
-    std::cout << "choose pawn: \n";
-    std::getline(std::cin, pawn);
-    std::cout << "move to new position: \n";
-    std::getline(std::cin, pos);
-    static int i = 3;
-    m_tools[2].SetPosition(std::pair<u_int32_t, u_int32_t>(i % 8, 4));
-    ++i;
+    m_tools[2].SetPosition(std::pair<u_int32_t, u_int32_t>(row, col));
 }
+
 // void Move(std::string pawn_id);
 //  void Capture(std::string pawn_id, enum Direction move_dir);
 //  std::list<Pawn> GetPawns(std::string id);

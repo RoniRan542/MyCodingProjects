@@ -12,7 +12,7 @@ class Player
 public:
     explicit Player(Color player_color, std::string name);
     std::vector<Pawn> GetPawns() const;
-    void Move();
+    void Move(int row, int col);
     Color GetColor() const;
 
 private:

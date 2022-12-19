@@ -6,12 +6,16 @@
 #include "square.hpp"
 #include "player.hpp"
 
-int GameLoop()
+int GameLoop(Game &game)
 {
-    std::thread thread;
     while (!WindowShouldClose())
     {
+        if (IsMouseButtonPressed(0))
+        {
+            Vector2 pos = GetMousePosition();
+            game.PlayTurn((pos.x / 120), (pos.y / 120));
         }
+    }
 }
 
 int main(void)
@@ -20,7 +24,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
     const int screenWidth = 960;
     const int screenHeight = 960;
-    InitWindow(screenWidth, screenHeight, "Damka");
+    InitWindow(screenWidth, screenHeight, "Checkers");
 
     Game game;
     Board board = game.GetBoard();
@@ -36,13 +40,25 @@ int main(void)
     camera.zoom = 1;
     // make players
     // make
-    std::thread thread;
+    std::thread thread(GameLoop, std::ref(game));
+
+    // Define the camera to look into our 3d world
+    Camera3D camera3 = {0};
+    camera3.position = (Vector3){0.0f, 10.0f, 10.0f}; // Camera position
+    camera3.target = (Vector3){0.0f, 0.0f, 0.0f};     // Camera looking at point
+    camera3.up = (Vector3){0.0f, 1.0f, 0.0f};         // Camera up vector (rotation towards target)
+    camera3.fovy = 45.0f;                             // Camera field-of-view Y
+    camera3.projection = CAMERA_ORTHOGRAPHIC;         // Camera mode type
+
+    Vector3 circle_position = {0.0f, 0.0f, 0.0f};
+    Vector3 circle_position2 = {0.9f, 0.0f, 7.9f};
+    Vector3 rotation_axis = {1, 1, 1};
     while (!WindowShouldClose())
     {
         BeginDrawing();
         ClearBackground(LIGHTGRAY);
-        BeginMode2D(camera);
 
+        BeginMode2D(camera);
         for (size_t i = 0; i < 8; ++i)
         {
             for (size_t j = 0; j < 8; ++j)
@@ -76,10 +92,19 @@ int main(void)
             }
         }
 
+        // game.PlayTurn();
         EndMode2D();
+        /* BeginMode3D(camera3);
+        DrawCylinder(circle_position, 2.5, 2.5, 0.6, 5, BLACK);
+        DrawCylinderWires(circle_position, 2.5, 2.5, 0.6, 20, DARKGRAY);
+        DrawCylinder(circle_position2, 2.5, 2.5, 0.6, 5, BLACK);
+        DrawCylinderWires(circle_position2, 2.5, 2.5, 0.6, 20, DARKGRAY);
+        EndMode3D(); */
         EndDrawing();
     }
 
     CloseWindow();
+    thread.join();
+
     return 0;
 }
