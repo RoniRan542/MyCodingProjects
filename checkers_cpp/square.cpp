@@ -29,6 +29,7 @@ std::pair<float, float> Square::GetDLPoint() const
 {
     return m_down_left;
 }
+
 std::pair<float, float> Square::GetURPoint() const
 {
     return m_up_right;

@@ -11,10 +11,13 @@ class Board
 public:
     explicit Board();
     std::vector<std::vector<Square>> &GetBoard();
+    int Move(const Square &src, const Square &dest,
+             enum PlayerId plyr, std::vector<char> id_vec);
+    int IsValidMove(const Square &src, const Square &dest,
+                    enum PlayerId plyr, std::vector<char> id_vec);
 
 private:
-    void
-    Init();
+    void Init();
     std::vector<std::vector<Square>> board_squares_2d;
 };
 
