@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstdlib>
-
+#include <math.h>
 #include "board.hpp"
 
 Board::Board()
@@ -10,31 +10,112 @@ Board::Board()
 
 void Board::Init()
 {
-    uint32_t window_width = 960;
-    uint32_t window_height = 960;
-    uint32_t block_height = 120;
-    uint32_t block_width = 120;
+    int counter = 0;
     board_squares_2d.resize(8);
     for (size_t i = 0; i < 8; i++)
     {
         board_squares_2d[i].resize(8);
-    }
-
-    std::pair<uint32_t, uint32_t> lower_point = {0, 0};
-    std::pair<uint32_t, uint32_t> upper_point = {block_height, block_width};
-
-    for (int i = 0; upper_point.first <= window_height; lower_point.first += block_height, upper_point.first += block_height, ++i)
-    {
-        for (int j = 0; upper_point.second <= window_width; lower_point.second += block_width, upper_point.second += block_width, ++j)
+        for (size_t j = 0; j < 8; j++)
         {
-            board_squares_2d[i][j] = Square(upper_point, lower_point);
+            board_squares_2d[i][j].SetXY(i, j);
+
+            if (i < 3)
+            {
+                if ((i % 2) == 0)
+                {
+                    if (j % 2 == 1)
+                    {
+                        board_squares_2d[i][j].SetPlayer(PlayerId::ONE);
+                        board_squares_2d[i][j].SetPawnId(counter++);
+                    }
+                }
+                else
+                {
+                    if (j % 2 == 0)
+                    {
+                        board_squares_2d[i][j].SetPlayer(PlayerId::ONE);
+                        board_squares_2d[i][j].SetPawnId(counter++);
+                    }
+                }
+            }
+            else if (i > 4)
+            {
+                if ((i % 2) == 1)
+                {
+                    if (j % 2 == 0)
+                    {
+                        board_squares_2d[i][j].SetPlayer(PlayerId::TWO);
+                        board_squares_2d[i][j].SetPawnId(counter++);
+                    }
+                }
+                else
+                {
+                    if (j % 2 == 1)
+                    {
+                        board_squares_2d[i][j].SetPlayer(PlayerId::TWO);
+                        board_squares_2d[i][j].SetPawnId(counter++);
+                    }
+                }
+            }
         }
-        lower_point.second = 0;
-        upper_point.second = block_height;
     }
 }
 
-std::vector<std::vector<Square>> &Board::GetBoard()
+void Board::Move(BoardSquare &src, BoardSquare &dest,
+                 enum PlayerId plyr, int pawn_id)
 {
-    return board_squares_2d;
+
+    src.SetPlayer(PlayerId::VOID);
+    src.SetPawnId(-1);
+    dest.SetPlayer(plyr);
+    dest.SetPawnId(pawn_id);
 }
+
+int Board::MoveIfValid(BoardSquare &src, BoardSquare &dest,
+                       enum PlayerId plyr, int pawn_id)
+{
+    // check if the pawn belongs ro this player:
+    if (src.GetPlayerId() != plyr)
+    {
+        return -1;
+    }
+    // check if dest is empty:
+    if (dest.GetPlayerId() != PlayerId::VOID)
+    {
+        return -1;
+    }
+    // check if move is consistent
+    if (abs(dest.GetX() - src.GetX()) != 1 || abs(dest.GetY() - src.GetY()) != 1)
+    {
+        if (abs(dest.GetX() - src.GetX()) != 2 && abs(dest.GetY() - src.GetY()) != 2)
+        {
+            BoardSquare &mid_square = board_squares_2d[src.GetX() + 1][src.GetY() + 1];
+
+            if (mid_square.GetPlayerId() != plyr &&
+                mid_square.GetPlayerId() != PlayerId::VOID)
+            {
+                Move(src, dest, plyr, pawn_id);
+                Kill(mid_square);
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
+    void Board::Kill(BoardSquare & other)
+    {
+        other.SetPlayerId(PlayerId::VOID);
+        other.SetPawnId(-1);
+    }
+
+    std::vector<std::vector<BoardSquare>> &Board::GetBoard()
+    {
+        return board_squares_2d;
+    }

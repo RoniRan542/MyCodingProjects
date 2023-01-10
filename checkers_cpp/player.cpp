@@ -3,7 +3,8 @@
 
 #include "player.hpp"
 
-Player::Player(Color player_color, std::string name) : m_color(player_color), m_name(name)
+Player::Player(Board &board, Color player_color, std::string name)
+    : m_board(board), m_color(player_color), m_name(name)
 {
     size_t count = 0;
     if (IsEqualColor(m_color, BLACK))
@@ -39,9 +40,9 @@ Color Player::GetColor() const
     return m_color;
 }
 
-void Player::Move(int row, int col)
+void Player::MovePlayer(int row, int col)
 {
-    m_tools[2].SetPosition(std::pair<u_int32_t, u_int32_t>(row, col));
+    m_board.
 }
 
 // void Move(std::string pawn_id);

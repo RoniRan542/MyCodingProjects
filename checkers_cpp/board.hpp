@@ -5,20 +5,23 @@
 #include <vector>
 
 #include "square.hpp"
+#include "board_square.hpp"
 
 class Board
 {
 public:
     explicit Board();
-    std::vector<std::vector<Square>> &GetBoard();
-    int Move(const Square &src, const Square &dest,
-             enum PlayerId plyr, std::vector<char> id_vec);
-    int IsValidMove(const Square &src, const Square &dest,
-                    enum PlayerId plyr, std::vector<char> id_vec);
+    std::vector<std::vector<BoardSquare>> &GetBoard();
+
+    int MoveIfValid(BoardSquare &src, BoardSquare &dest,
+                    enum PlayerId plyr, int pawn_id);
 
 private:
     void Init();
-    std::vector<std::vector<Square>> board_squares_2d;
+    void Move(BoardSquare &src, BoardSquare &dest,
+              enum PlayerId plyr, int pawn_id);
+    void Kill(BoardSquare &other);
+    std::vector<std::vector<BoardSquare>> board_squares_2d;
 };
 
 #endif // __BOARD_HPP__

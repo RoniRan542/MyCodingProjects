@@ -11,16 +11,16 @@
 class Player
 {
 public:
-    explicit Player(Board board, Color player_color, std::string name);
+    explicit Player(Board &board, Color player_color, std::string name);
     std::vector<Pawn> GetPawns() const;
-    void Move(const Square &src, const Square &dest);
+    void MovePlayer(const Square &src, const Square &dest);
     Color GetColor() const;
 
 private:
+    Board &m_board;
     std::vector<Pawn> m_tools;
     std::string m_name;
     Color m_color;
-    Board &board;
 };
 
 static bool IsEqualColor(const Color c1, const Color c2)

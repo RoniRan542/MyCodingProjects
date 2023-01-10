@@ -5,8 +5,10 @@
 
 enum PlayerId
 {
+    VOID,
     ONE,
     TWO
+
 };
 
 class BoardSquare
@@ -16,6 +18,9 @@ public:
     BoardSquare(int x, int y);
     BoardSquare(const BoardSquare &other);
     BoardSquare &operator=(const BoardSquare &other);
+    void SetXY(int x, int y);
+    void SetPlayer(PlayerId pid);
+    void SetPawnId(int id);
     int GetX() const;
     int GetY() const;
     PlayerId GetPlayerId() const;
