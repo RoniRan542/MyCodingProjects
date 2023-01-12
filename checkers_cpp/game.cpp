@@ -2,16 +2,16 @@
 
 Game::Game(std::string p_name1, std::string p_name2)
 {
-    Player p1(BLACK, p_name1);
-    Player p2(LIGHTGRAY, p_name2);
+    Player p1(m_board, BLACK, p_name1, PlayerId::ONE);
+    Player p2(m_board, LIGHTGRAY, p_name2, PlayerId::TWO);
     m_players.push_back(p1);
     m_players.push_back(p2);
 }
 void Game::PlayTurn(int x, int y)
 {
     std::cout << "player is: " << m_curr_player << std::endl;
-    m_players[!!m_curr_player]
-        .Move(x, y);
+    m_players[!!m_curr_player].MovePlayer(m_board.GetBoard()[x][y], m_board.GetBoard()[x][y]);
+
     m_curr_player = !m_curr_player;
 }
 /* void PlayerMove(Player plyr, Pawn &pawn, enum Direction dir, int steps);

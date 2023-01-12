@@ -1,49 +1,87 @@
 #include <iostream>
 #include <vector>
+#include <chrono>
 
-void solveNQueens2(std::vector<std::vector<std::string>> &res, std::vector<std::string> &nQueens, std::vector<int> &flag, int row, int &n)
+using namespace std;
+
+bool IsValid(vector<vector<int>> &flags, int row, int col, int &n)
+{
+    for (int i = 0; i < row; ++i)
+    {
+        if (flags[i][col])
+        {
+            return false;
+        }
+    }
+
+    for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; --i, --j)
+    {
+        if (flags[i][j])
+        {
+            return false;
+        }
+    }
+
+    for (int i = row - 1, j = col + 1; i >= 0 && j < n; --i, ++j)
+    {
+        if (flags[i][j])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void solveNQueens2(vector<vector<string>> &res, vector<string> &nQueens, vector<vector<int>> &flags, int row, int &n)
 {
     if (row == n)
     {
-        res.push_back(nQueens);
+        res.push_back(nQueens); // if a solution was found, insert to the res
         return;
     }
-    for (int col = 0; col != n; ++col)
-        if (flag[col] && flag[n + row + col] && flag[4 * n - 2 + col - row])
+
+    for (int col = 0; col < n; ++col)
+    {
+        if (IsValid(flags, row, col, n))
         {
-            flag[col] = flag[n + row + col] = flag[4 * n - 2 + col - row] = 0;
+            flags[row][col] = 1;
             nQueens[row][col] = 'Q';
-            solveNQueens2(res, nQueens, flag, row + 1, n);
+            solveNQueens2(res, nQueens, flags, row + 1, n);
+            flags[row][col] = 0;
             nQueens[row][col] = '.';
-            flag[col] = flag[n + row + col] = flag[4 * n - 2 + col - row] = 1;
         }
+    }
 }
 
-std::vector<std::vector<std::string>> solveNQueens(int n)
+vector<vector<string>> solveNQueens(int n)
 {
-    std::vector<std::vector<std::string>> res;
-    std::vector<std::string> nQueens(n, std::string(n, '.'));
-    /*
-    flag[0] to flag[n - 1] to indicate if the column had a queen before.
-    flag[n] to flag[3 * n - 2] to indicate if the 45° diagonal had a queen before.
-    flag[3 * n - 1] to flag[5 * n - 3] to indicate if the 135° diagonal had a queen before.
-    */
-    std::vector<int> flag(5 * n - 2, 1);
-    solveNQueens2(res, nQueens, flag, 0, n);
+    vector<vector<string>> res;
+    vector<string> nQueens(n, string(n, '.'));
+    vector<vector<int>> flags_matrix(n, vector<int>(n, 0));
+
+    solveNQueens2(res, nQueens, flags_matrix, 0, n);
     return res;
 }
 
 int main()
 {
-    std::vector<std::vector<std::string>> solutions = solveNQueens(7);
+    // Start the timer
+    auto start = std::chrono::high_resolution_clock::now();
+    vector<vector<string>> solutions = solveNQueens(5);
+    // Stop the timer
+    auto stop = std::chrono::high_resolution_clock::now();
+    // Calculate the elapsed time
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 
+    std::cout << "Elapsed time: " << elapsed.count() << " microseconds" << std::endl;
     for (size_t i = 0; i < solutions.size(); ++i)
     {
         for (size_t j = 0; j < solutions[i].size(); ++j)
         {
-            std::cout << solutions[i][j] << " ";
+            cout << solutions[i][j] << " ";
         }
-        std::cout << std::endl;
+        cout << endl;
     }
 
     return 0;

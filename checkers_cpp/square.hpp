@@ -2,11 +2,7 @@
 #define __SQUARE_HPP__
 
 #include <iostream>
-enum PlayerId
-{
-    ONE,
-    TWO
-};
+
 class Square
 {
 public:

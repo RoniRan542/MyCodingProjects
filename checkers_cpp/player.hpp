@@ -6,21 +6,21 @@
 
 #include "/home/rani/raylib/src/raylib.h"
 #include "pawn.hpp"
+#include "board_square.hpp"
 #include "board.hpp"
 
 class Player
 {
 public:
-    explicit Player(Board &board, Color player_color, std::string name);
-    std::vector<Pawn> GetPawns() const;
-    void MovePlayer(const Square &src, const Square &dest);
+    explicit Player(Board &board, Color player_color, std::string name, PlayerId player_id);
+    int MovePlayer(BoardSquare &src, BoardSquare &dest);
     Color GetColor() const;
 
 private:
     Board &m_board;
-    std::vector<Pawn> m_tools;
     std::string m_name;
     Color m_color;
+    PlayerId m_pid;
 };
 
 static bool IsEqualColor(const Color c1, const Color c2)

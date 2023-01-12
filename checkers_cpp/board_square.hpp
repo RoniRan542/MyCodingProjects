@@ -3,13 +3,7 @@
 
 #include <iostream>
 
-enum PlayerId
-{
-    VOID,
-    ONE,
-    TWO
-
-};
+#include "pawn.hpp"
 
 class BoardSquare
 {
@@ -19,10 +13,12 @@ public:
     BoardSquare(const BoardSquare &other);
     BoardSquare &operator=(const BoardSquare &other);
     void SetXY(int x, int y);
+    void SetPawn(Pawn *pawn);
     void SetPlayer(PlayerId pid);
     void SetPawnId(int id);
     int GetX() const;
     int GetY() const;
+    Pawn *GetPawn();
     PlayerId GetPlayerId() const;
     int GetPawnID() const;
     ~BoardSquare();
@@ -30,8 +26,7 @@ public:
 private:
     int m_x;
     int m_y;
-    enum PlayerId m_plyr;
-    int m_pawn_id;
+    Pawn *m_pawn;
 };
 
 #endif // __BOARD_SQUARE_HPP__

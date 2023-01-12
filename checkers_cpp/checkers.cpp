@@ -5,6 +5,7 @@
 #include "game.hpp"
 #include "square.hpp"
 #include "player.hpp"
+#include "grid.hpp"
 
 int GameLoop(Game &game)
 {
@@ -28,8 +29,11 @@ int main(void)
 
     Game game;
     Board board = game.GetBoard();
+    Grid grid;
     bool alternate = false;
-    std::vector<std::vector<Square>> bo(board.GetBoard());
+
+    std::vector<std::vector<Square>> the_grid = grid.GetGrid();
+    std::vector<std::vector<BoardSquare>> bo(board.GetBoard());
     SetTargetFPS(1);
     Camera2D camera;
     camera.offset.x = -120;
@@ -63,7 +67,7 @@ int main(void)
         {
             for (size_t j = 0; j < 8; ++j)
             {
-                Rectangle rec = {bo[i][j].GetDLPoint().first, bo[i][j].GetDLPoint().second, 120, 120};
+                Rectangle rec = {the_grid[i][j].GetDLPoint().first, the_grid[i][j].GetDLPoint().second, 120, 120};
                 if (alternate == true)
                 {
                     DrawRectangleRec(rec, WHITE);
@@ -75,6 +79,7 @@ int main(void)
                     alternate = true;
                 }
             }
+
             alternate = alternate == true ? false : true;
         }
 
@@ -83,15 +88,28 @@ int main(void)
         for (auto const &player : game.GetPlayers())
         {
             std::cout << counter++ << std::endl;
-            auto color = player.GetColor();
-            for (auto const &pawn : player.GetPawns())
+            for (size_t i = 0; i < 8; ++i)
             {
-                std::pair<u_int32_t, u_int32_t> coordinates = pawn.GetPosition();
-                DrawCircle(bo[coordinates.first][coordinates.second].GetDLPoint().first + 60,
-                           bo[coordinates.first][coordinates.second].GetDLPoint().second + 60, 55, CLITERAL(color));
+                for (size_t j = 0; j < 8; ++j)
+                {
+                    if (bo[i][j].GetPawn() != nullptr)
+                    {
+                        if (bo[i][j].GetPawn()->GetPlayerId() == PlayerId::ONE)
+                        {
+                            auto color = game.GetPlayers()[0].GetColor();
+                            DrawCircle(the_grid[i][j].GetDLPoint().first + 60,
+                                       the_grid[i][j].GetDLPoint().second + 60, 55, CLITERAL(color));
+                        }
+                        else
+                        {
+                            auto color = game.GetPlayers()[1].GetColor();
+                            DrawCircle(the_grid[i][j].GetDLPoint().first + 60,
+                                       the_grid[i][j].GetDLPoint().second + 60, 55, CLITERAL(color));
+                        }
+                    }
+                }
             }
         }
-
         // game.PlayTurn();
         EndMode2D();
         /* BeginMode3D(camera3);

@@ -11,20 +11,21 @@ Board::Board()
 void Board::Init()
 {
     int counter = 0;
-    board_squares_2d.resize(8);
+    board_squares_2d.resize(8, std::vector<BoardSquare>(8));
     for (size_t i = 0; i < 8; i++)
     {
-        board_squares_2d[i].resize(8);
         for (size_t j = 0; j < 8; j++)
         {
             board_squares_2d[i][j].SetXY(i, j);
 
             if (i < 3)
             {
+
                 if ((i % 2) == 0)
                 {
                     if (j % 2 == 1)
                     {
+                        std::cout << i << " " << j << std::endl;
                         board_squares_2d[i][j].SetPlayer(PlayerId::ONE);
                         board_squares_2d[i][j].SetPawnId(counter++);
                     }
@@ -64,11 +65,8 @@ void Board::Init()
 void Board::Move(BoardSquare &src, BoardSquare &dest,
                  enum PlayerId plyr, int pawn_id)
 {
-
-    src.SetPlayer(PlayerId::VOID);
-    src.SetPawnId(-1);
-    dest.SetPlayer(plyr);
-    dest.SetPawnId(pawn_id);
+    dest.SetPawn(src.GetPawn());
+    src.SetPawn(nullptr);
 }
 
 int Board::MoveIfValid(BoardSquare &src, BoardSquare &dest,
@@ -80,7 +78,7 @@ int Board::MoveIfValid(BoardSquare &src, BoardSquare &dest,
         return -1;
     }
     // check if dest is empty:
-    if (dest.GetPlayerId() != PlayerId::VOID)
+    if (dest.GetPawn() != nullptr)
     {
         return -1;
     }
@@ -108,14 +106,14 @@ int Board::MoveIfValid(BoardSquare &src, BoardSquare &dest,
             return -1;
         }
     }
+}
 
-    void Board::Kill(BoardSquare & other)
-    {
-        other.SetPlayerId(PlayerId::VOID);
-        other.SetPawnId(-1);
-    }
+void Board::Kill(BoardSquare &other)
+{
+    other.SetPawn(nullptr);
+}
 
-    std::vector<std::vector<BoardSquare>> &Board::GetBoard()
-    {
-        return board_squares_2d;
-    }
+std::vector<std::vector<BoardSquare>> &Board::GetBoard()
+{
+    return board_squares_2d;
+}
