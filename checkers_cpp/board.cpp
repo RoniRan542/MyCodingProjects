@@ -23,16 +23,15 @@ void Board::Init()
 
                 if ((i % 2) == 0)
                 {
-                    if (j % 2 == 1)
+                    if (j % 2 == 0)
                     {
-                        std::cout << i << " " << j << std::endl;
                         board_squares_2d[i][j].SetPlayer(PlayerId::ONE);
                         board_squares_2d[i][j].SetPawnId(counter++);
                     }
                 }
                 else
                 {
-                    if (j % 2 == 0)
+                    if (j % 2 == 1)
                     {
                         board_squares_2d[i][j].SetPlayer(PlayerId::ONE);
                         board_squares_2d[i][j].SetPawnId(counter++);
@@ -43,7 +42,7 @@ void Board::Init()
             {
                 if ((i % 2) == 1)
                 {
-                    if (j % 2 == 0)
+                    if (j % 2 == 1)
                     {
                         board_squares_2d[i][j].SetPlayer(PlayerId::TWO);
                         board_squares_2d[i][j].SetPawnId(counter++);
@@ -51,7 +50,7 @@ void Board::Init()
                 }
                 else
                 {
-                    if (j % 2 == 1)
+                    if (j % 2 == 0)
                     {
                         board_squares_2d[i][j].SetPlayer(PlayerId::TWO);
                         board_squares_2d[i][j].SetPawnId(counter++);
@@ -66,19 +65,22 @@ void Board::Move(BoardSquare &src, BoardSquare &dest,
                  enum PlayerId plyr, int pawn_id)
 {
     dest.SetPawn(src.GetPawn());
-    src.SetPawn(nullptr);
+    src.SetPawn(Pawn());
 }
 
 int Board::MoveIfValid(BoardSquare &src, BoardSquare &dest,
                        enum PlayerId plyr, int pawn_id)
 {
     // check if the pawn belongs ro this player:
+    std::cout << "src player id: " << src.GetPlayerId() << std::endl;
+    std::cout << "actual player id: " << plyr << std::endl;
     if (src.GetPlayerId() != plyr)
     {
         return -1;
     }
     // check if dest is empty:
-    if (dest.GetPawn() != nullptr)
+    std::cout << "dest pawn id: " << dest.GetPawn().GetPawnId() << std::endl;
+    if (dest.GetPawn().GetPawnId() != -1)
     {
         return -1;
     }
@@ -110,7 +112,7 @@ int Board::MoveIfValid(BoardSquare &src, BoardSquare &dest,
 
 void Board::Kill(BoardSquare &other)
 {
-    other.SetPawn(nullptr);
+    other.SetPawn(Pawn());
 }
 
 std::vector<std::vector<BoardSquare>> &Board::GetBoard()

@@ -13,12 +13,12 @@ public:
     BoardSquare(const BoardSquare &other);
     BoardSquare &operator=(const BoardSquare &other);
     void SetXY(int x, int y);
-    void SetPawn(Pawn *pawn);
+    void SetPawn(Pawn pawn);
     void SetPlayer(PlayerId pid);
     void SetPawnId(int id);
     int GetX() const;
     int GetY() const;
-    Pawn *GetPawn();
+    Pawn GetPawn();
     PlayerId GetPlayerId() const;
     int GetPawnID() const;
     ~BoardSquare();
@@ -26,7 +26,7 @@ public:
 private:
     int m_x;
     int m_y;
-    Pawn *m_pawn;
+    Pawn m_pawn;
 };
 
 #endif // __BOARD_SQUARE_HPP__

@@ -13,9 +13,9 @@ class Game
 {
 public:
     explicit Game(std::string p_name1 = "player 1", std::string p_name2 = "player 2");
-    void PlayTurn(int x, int y);
+    int PlayTurn(int x, int y);
     bool IsValidMove(Pawn pawn, std::pair<u_int32_t, u_int32_t>);
-    Board GetBoard() const;
+    Board &GetBoard();
     std::vector<Player> GetPlayers() const;
 
 private:

@@ -14,7 +14,16 @@ int GameLoop(Game &game)
         if (IsMouseButtonPressed(0))
         {
             Vector2 pos = GetMousePosition();
-            game.PlayTurn((pos.x / 120), (pos.y / 120));
+            // std::cout << pos.x / 120 << " " << pos.y / 120 << std::endl;
+            std::cout << game.PlayTurn((pos.x / 120), (pos.y / 120)) << std::endl;
+            /* if (game.PlayTurn((pos.x / 120), (pos.y / 120)) == -1)
+            {
+                continue;
+            }
+            else
+            {
+                continue;
+            } */
         }
     }
 }
@@ -28,12 +37,12 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "Checkers");
 
     Game game;
-    Board board = game.GetBoard();
+
     Grid grid;
     bool alternate = false;
 
     std::vector<std::vector<Square>> the_grid = grid.GetGrid();
-    std::vector<std::vector<BoardSquare>> bo(board.GetBoard());
+    std::vector<std::vector<BoardSquare>> *bo = &game.GetBoard().GetBoard();
     SetTargetFPS(1);
     Camera2D camera;
     camera.offset.x = -120;
@@ -87,14 +96,14 @@ int main(void)
         size_t counter = 0;
         for (auto const &player : game.GetPlayers())
         {
-            std::cout << counter++ << std::endl;
+
             for (size_t i = 0; i < 8; ++i)
             {
                 for (size_t j = 0; j < 8; ++j)
                 {
-                    if (bo[i][j].GetPawn() != nullptr)
+                    if ((*bo)[i][j].GetPawn().GetPawnId() != -1)
                     {
-                        if (bo[i][j].GetPawn()->GetPlayerId() == PlayerId::ONE)
+                        if ((*bo)[i][j].GetPawn().GetPlayerId() == PlayerId::ONE)
                         {
                             auto color = game.GetPlayers()[0].GetColor();
                             DrawCircle(the_grid[i][j].GetDLPoint().first + 60,

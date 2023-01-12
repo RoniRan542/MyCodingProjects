@@ -14,7 +14,7 @@ enum PlayerId
 class Pawn
 {
 public:
-    explicit Pawn();
+    explicit Pawn(int id = -1, bool is_king = false, PlayerId pid = PlayerId::VOID);
     explicit Pawn(int pawn_id);
     int GetPawnId() const;
     PlayerId GetPlayerId() const;

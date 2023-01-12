@@ -22,19 +22,19 @@ void BoardSquare::SetXY(int x, int y)
     m_y = y;
 }
 
-void BoardSquare::SetPawn(Pawn *pawn)
+void BoardSquare::SetPawn(Pawn pawn)
 {
     m_pawn = pawn;
 }
 
 void BoardSquare::SetPlayer(PlayerId pid)
 {
-    m_pawn->SetPlayerId(pid);
+    m_pawn.SetPlayerId(pid);
 }
 
 void BoardSquare::SetPawnId(int id)
 {
-    m_pawn->SetPawnId(id);
+    m_pawn.SetPawnId(id);
 }
 
 BoardSquare &BoardSquare::operator=(const BoardSquare &other)
@@ -55,19 +55,19 @@ int BoardSquare::GetY() const
     return m_y;
 }
 
-Pawn *BoardSquare::GetPawn()
+Pawn BoardSquare::GetPawn()
 {
     return m_pawn;
 }
 
 PlayerId BoardSquare::GetPlayerId() const
 {
-    return m_pawn->GetPlayerId();
+    return m_pawn.GetPlayerId();
 }
 
 int BoardSquare::GetPawnID() const
 {
-    return m_pawn->GetPawnId();
+    return m_pawn.GetPawnId();
 }
 
 BoardSquare::~BoardSquare()

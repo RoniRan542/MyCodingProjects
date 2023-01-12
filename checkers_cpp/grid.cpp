@@ -14,11 +14,7 @@ void Grid::Init()
     uint32_t window_height = 960;
     uint32_t block_height = 120;
     uint32_t block_width = 120;
-    grid_squares_2d.resize(8);
-    for (size_t i = 0; i < 8; i++)
-    {
-        grid_squares_2d[i].resize(8);
-    }
+    grid_squares_2d.resize(8, std::vector<Square>(8));
 
     std::pair<uint32_t, uint32_t> lower_point = {0, 0};
     std::pair<uint32_t, uint32_t> upper_point = {block_height, block_width};

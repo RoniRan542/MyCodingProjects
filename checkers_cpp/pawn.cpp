@@ -2,11 +2,8 @@
 
 #include "pawn.hpp"
 
-Pawn::Pawn() : m_pawn_id(0), m_is_king(false)
-{
-}
-
-Pawn::Pawn(int id) : m_pawn_id(id), m_is_king(false)
+Pawn::Pawn(int id, bool is_king, PlayerId pid)
+    : m_pawn_id(id), m_is_king(false), m_pid(pid)
 {
     // empty
 }
