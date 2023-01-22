@@ -9,3 +9,8 @@
 !*.md
 !.myfuncs
 !*.html
+!*.py
+!*.css
+!*.js
+!Pipfile.lock
+!Pipfile

@@ -1,0 +1,215 @@
+﻿ul.dropdown
+{
+    position: relative;
+    z-index: 6000;
+    float: right;
+}
+
+    ul.dropdown,
+    ul.dropdown li
+    {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        line-height: 100%;
+        height: 37px;
+    }
+
+
+        /* מחלקה זו מטפלת במראה של הבנים */
+        ul.dropdown ul
+        {
+            list-style: none;
+            visibility: hidden;
+            position: absolute;
+            right: 9px;
+            top: 27px;
+            /*z-index: 598;*/
+            text-align: right;
+            margin-top: 0px;
+            padding: 0px;
+        }
+
+        ul.dropdown li
+        {
+            float: right;
+            vertical-align: middle;
+            zoom: 1;
+            border-width: 0 0 0 0;
+            text-align: right;
+        }
+
+            ul.dropdown li:hover
+            {
+                position: relative;
+                /*z-index: 599;*/
+                cursor: default;
+               /* background-image: url(./images/MenuArrow.png);*/
+                background-position:bottom right;
+                background-repeat:no-repeat;
+            }
+
+        ul.dropdown ul li
+        {
+            float: none;
+            padding: 4px 0px 4px;
+            font-weight: normal;
+        }
+
+        ul.dropdown li:hover > ul
+        {
+            visibility: visible;
+        }
+
+        ul.dropdown li ul li
+        {
+margin-right: -10px;
+font-weight: normal;
+background-color: #FFD41D;
+border: 1px solid #FFD41D;
+padding-right: 15px;
+width: 212px;
+text-align: right;
+direction: rtl;
+background-image: none;
+height: 27px;
+        }
+
+            ul.dropdown li ul li:hover
+            { 
+margin-right: -10px;
+font-weight: normal;
+background-color: #FFD41D;
+border: 1px solid #FFD41D;
+padding-right: 15px;
+width: 212px;
+text-align: right;
+direction: rtl;
+background-image: none;
+text-decoration: underline;
+height: 27px;
+               
+            }
+
+/*===========================================================================*/
+
+.td-Style
+{
+    font-family: Arial, Sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+text-decoration: none;
+width: auto;
+height: 14px;
+line-height: 14%;
+text-align: center;
+padding-left: 15px;
+padding-right: 14px;
+border-left: 1px solid #333;
+
+}
+
+.arrow-down-selected
+{
+    height:23px;	
+width:100%;	
+    background-image: url(./images/MenuArrow.png);
+                background-position:bottom right;
+                background-repeat:no-repeat;
+}
+
+.td-NotSelected
+{color: black
+}
+
+.td-Selected, .td-NotSelected:hover
+{
+    font-family: arial, Sans-serif;
+	font-weight: normal;
+	font-size: 18px;
+	color: black;
+	text-decoration: underline;
+
+}
+
+
+
+/* Last Menu-Item Td-Style*/
+.tdLast-NotSelected
+{
+    border-left:0px;
+   
+    color: black;
+	
+	
+
+}
+
+
+.tdLast-Selected, .tdLast-Selected:hover, .tdLast-NotSelected:hover
+{
+    border-left:0px;
+	font-family: arial, Sans-serif;
+	color: black;
+	text-decoration: underline;
+
+}
+
+/* Sons */
+.td-SonNotSelected
+{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 200%;
+    color: black;
+    text-align: right;
+    text-decoration: none;
+}
+
+    .td-SonNotSelected:hover
+    {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: bold;
+        line-height: 200%;
+        color: black;
+        text-align: right;
+        text-decoration: underline;
+        background-image: url(./images/top-menue-over.jpg);
+    }
+
+
+
+    /* Bottom Menu*/
+
+    .td-Style-bot
+{
+    font-family: arial, Sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    text-decoration: none;
+    width: auto;
+    height: 8px;
+    line-height: 95%;
+    text-align: center;
+    padding-left: 9px;
+padding-right: 9px;
+    border-left: 1px solid #333;
+}
+
+.td-NotSelected-bot
+{
+   color: #666;
+
+}
+
+.td-Selected-bot, .td-NotSelected-bot:hover
+{
+    color: #000;
+}
+
