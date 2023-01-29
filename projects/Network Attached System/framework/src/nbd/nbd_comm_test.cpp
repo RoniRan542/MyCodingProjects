@@ -5,7 +5,7 @@
 #include <err.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <cstring>
 #include <sys/types.h>
 
 #include "nbd_comm.hpp"
@@ -15,8 +15,6 @@
 #include "factory.hpp"
 #include "thread_pool.hpp"
 #include "handleton.hpp"
-
-using namespace ilrd;
 
 #ifndef BUSE_DEBUG
 #define BUSE_DEBUG (0)
@@ -41,6 +39,8 @@ u_int64_t ntohll(u_int64_t a)
 
 static void *data;
 
+using namespace ilrd;
+
 class EventTask : public Task
 {
 public:
@@ -62,20 +62,20 @@ private:
     Event *m_event;
 };
 
-Event *CreateReadEvent(struct args &arg)
+Event *CreateReadEvent(args_t &arg)
 {
     return new ReadEvent(arg);
 }
 
-Event *CreateWriteEvent(struct args &arg)
+Event *CreateWriteEvent(args_t &arg)
 {
     return new WriteEvent(arg);
 }
 
 static int read_imp(void *buf, u_int32_t len, u_int64_t offset, void *userdata)
 {
-    Factory<Event, std::string, struct args &> *factory = Handleton<Factory<Event, std::string, struct args &>>::GetInstance();
-    Event *event = factory->Create("RE", (struct args &)buf);
+    Factory<Event, std::string, args_t &> *factory = Handleton<Factory<Event, std::string, args_t &>>::GetInstance();
+    Event *event = factory->Create("RE", (args_t &)buf);
     std::shared_ptr<Task> task(new EventTask(event));
     ThreadPool *tp = Handleton<ThreadPool>::GetInstance();
     tp->Add(task, PRIORITY::HIGH);
@@ -91,8 +91,8 @@ static int read_imp(void *buf, u_int32_t len, u_int64_t offset, void *userdata)
 
 static int write_imp(const void *buf, u_int32_t len, u_int64_t offset, void *userdata)
 {
-    Factory<Event, std::string, struct args &> *factory = Handleton<Factory<Event, std::string, struct args &>>::GetInstance();
-    Event *event = factory->Create("WE", (struct args &)buf);
+    Factory<Event, std::string, args_t &> *factory = Handleton<Factory<Event, std::string, args_t &>>::GetInstance();
+    Event *event = factory->Create("WE", (args_t &)buf);
     std::shared_ptr<Task> task(new EventTask(event));
     ThreadPool *tp = Handleton<ThreadPool>::GetInstance();
     tp->Add(task, PRIORITY::HIGH);
@@ -368,11 +368,11 @@ int main(int argc, char *argv[])
     aop.trim = trim_imp;
     aop.size = arguments.size;
 
-    Factory<Event, std::string, struct args &> *factory = Handleton<Factory<Event, std::string, struct args &>>::GetInstance();
+    Factory<Event, std::string, args_t &> *factory = Handleton<Factory<Event, std::string, args_t &>>::GetInstance();
     factory->Add("RE", CreateReadEvent);
     factory->Add("WE", CreateWriteEvent);
     Reactor *reactor = new Reactor();
-    NbdComm nbdcomm(argv[2], &aop);
+    NbdComm nbdcomm;
 
     ThreadPool *tp = Handleton<ThreadPool>::GetInstance();
 

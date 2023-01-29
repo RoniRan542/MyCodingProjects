@@ -1,6 +1,7 @@
 #ifndef __RD12123_FACTORY_HPP__
 #define __RD12123_FACTORY_HPP__
 
+#include <iostream>
 #include <unordered_map> //unordered map
 #include <functional>    //std::function
 #include <exception>     //exception

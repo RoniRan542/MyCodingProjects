@@ -31,10 +31,10 @@ namespace ilrd
     static void BlockSignals();
     static void ConfigureAndRunNbd(int sk, int nbd);
     static void EnableSignals();
-    static int PrepareNbd(std::string dev_file, const struct buse_operations *aop);
+    static int PrepareNbd(const char *dev_file, const size_t dev_size);
 
-    NbdComm::NbdComm(std::string dev_file, const struct buse_operations *aop)
-        : m_aop(aop), m_nbd(-1)
+    NbdComm::NbdComm(std::string dev_file, const size_t dev_size)
+        : m_nbd(-1)
     {
         int sp[2];
         int nbd, err, sk;
@@ -45,7 +45,7 @@ namespace ilrd
             std::cout << "socketpair failed.\n";
         }
 
-        nbd = PrepareNbd(dev_file, aop);
+        nbd = PrepareNbd(dev_file.c_str(), dev_size);
 
         m_pid = fork();
         if (m_pid == 0)
@@ -68,35 +68,24 @@ namespace ilrd
         m_socket = FileDesc(sp[0]);
     }
 
-    static int PrepareNbd(std::string dev_file, const struct buse_operations *aop)
+    static int PrepareNbd(const char *dev_file, const size_t dev_size)
     {
         int err, nbd;
-        nbd = open(dev_file.c_str(), O_RDWR);
+        size_t actual_dev_size = dev_size * 1048576;
+        nbd = open(dev_file, O_RDWR);
         if (nbd == -1)
         {
-            throw std::runtime_error("couldn't open nbd.\n");
+            fprintf(stderr,
+                    "Failed to open `%s': %s\n"
+                    "Is kernel module `nbd' loaded and you have permissions "
+                    "to access the device?\n",
+                    dev_file, strerror(errno));
+            throw std::runtime_error("couldn't open nbd!\n");
         }
 
-        if (aop->blksize)
+        if (ioctl(nbd, NBD_SET_SIZE, actual_dev_size) == -1)
         {
-            if (ioctl(nbd, NBD_SET_BLKSIZE, aop->blksize) == -1)
-            {
-                throw std::runtime_error("couldn't NBD_SET_BLKSIZE nbd.\n");
-            }
-        }
-        if (aop->size)
-        {
-            if (ioctl(nbd, NBD_SET_SIZE, aop->size) == -1)
-            {
-                throw std::runtime_error("couldn't NBD_SET_SIZE nbd.\n");
-            }
-        }
-        if (aop->size_blocks)
-        {
-            if (ioctl(nbd, NBD_SET_SIZE_BLOCKS, aop->size_blocks) == -1)
-            {
-                throw std::runtime_error("couldn't NBD_SET_SIZE_BLOCKS nbd.\n");
-            }
+            throw std::runtime_error("couldn't NBD_SET_SIZE nbd.\n");
         }
 
         err = ioctl(nbd, NBD_CLEAR_SOCK);

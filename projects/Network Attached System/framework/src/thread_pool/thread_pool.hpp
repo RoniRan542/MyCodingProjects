@@ -6,6 +6,8 @@
  *********************************************************/
 #ifndef __RD12123_THREAD_POOL_HPP__
 #define __RD12123_THREAD_POOL_HPP__
+
+#include <iostream>
 #include <functional>
 #include <thread>
 #include <queue>

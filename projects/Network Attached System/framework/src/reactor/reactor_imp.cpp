@@ -6,6 +6,7 @@
  *********************************************************/
 #include <sys/select.h> //for select
 #include <errno.h>
+#include <iostream>
 
 #include "reactor_imp.hpp"
 #include "handleton.hpp"
@@ -45,7 +46,7 @@ namespace ilrd
         ResetParams(m_params);
     }
 
-    void ReactorImp::AddImp(int fd, std::function<void()> func, Operation op)
+    void ReactorImp::AddImp(int fd, Operation op)
     {
         switch (op)
         {

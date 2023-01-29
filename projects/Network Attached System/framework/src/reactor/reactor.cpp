@@ -4,8 +4,8 @@
  * date: 09.10.22                                        *
  * file: reactor API implementation                      *
  *********************************************************/
-#include <iostream>             // for std::
-#include "../logger/logger.hpp" /* loggeer API */
+#include <iostream>   // for std::
+#include "logger.hpp" /* loggeer API */
 
 #include "reactor.hpp"
 #include "reactor_imp.hpp"
@@ -34,7 +34,7 @@ namespace ilrd
     void Reactor::Add(int fd, std::function<void()> func, operation_t op)
     {
         m_logger->Log("Reactor: adding fd\n");
-        m_rcimpl.AddImp(fd, func, op);
+        m_rcimpl.AddImp(fd, op);
         std::pair<int, Operation> callback(fd, op);
         m_invoke[callback] = func;
     }

@@ -47,7 +47,7 @@ namespace ilrd
     {
 
     public:
-        explicit NbdComm(std::string dev_file, const struct buse_operations *aop);
+        explicit NbdComm(std::string dev_file = "/dev/nbd1", const size_t dev_size = 128);
         ~NbdComm() noexcept;
 
         NbdComm(const NbdComm &) = delete;
@@ -57,7 +57,6 @@ namespace ilrd
         FileDesc GetNbdSocket();
 
     private:
-        const struct buse_operations *m_aop;
         FileDesc m_socket;
         int m_nbd;
         pid_t m_pid;

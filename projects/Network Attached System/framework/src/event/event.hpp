@@ -7,43 +7,53 @@
 #endif
 
 #include <iostream>
-#include <vector>
+#include <linux/nbd.h>
+#include <memory>
+#include <functional>
 
 namespace ilrd
 {
-    struct args
+    typedef struct Args
     {
-        void *data;
-    };
+        char event_data[4096];
+        struct nbd_reply reply;
+        u_int64_t from;
+        u_int32_t len;
+        int fd_sock;
+        int action;
+    } args_t;
 
     class Event
     {
     public:
         explicit Event(){};
         virtual void operator()() = 0;
+        virtual args_t &GetData() = 0;
         virtual ~Event() noexcept {};
     };
 
     class ReadEvent : public Event
     {
     public:
-        explicit ReadEvent(struct args &target_stream);
+        explicit ReadEvent(args_t &target_stream);
         virtual void operator()();
+        virtual args_t &GetData();
         virtual ~ReadEvent() noexcept;
 
     private:
-        std::vector<char> m_target; // where to read from
+        args_t m_args;
     };
 
     class WriteEvent : public Event
     {
     public:
-        explicit WriteEvent(struct args &data_stream);
+        explicit WriteEvent(args_t &data_stream);
         virtual void operator()();
+        virtual args_t &GetData();
         virtual ~WriteEvent() noexcept;
 
     private:
-        std::vector<char> m_data;
+        args_t m_args;
     };
 }
 

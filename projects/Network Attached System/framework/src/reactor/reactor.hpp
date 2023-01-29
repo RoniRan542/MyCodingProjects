@@ -7,6 +7,7 @@
 #ifndef __RD_12123_REACTOR_HPP__
 #define __RD_12123_REACTOR_HPP__
 
+#include <iostream>
 #include <map>
 #include <functional>
 
