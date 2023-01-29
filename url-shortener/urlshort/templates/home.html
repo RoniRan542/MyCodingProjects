@@ -42,7 +42,7 @@
   </div>
 
   {% if codes %}
-  <h2>Codes you have created:</h2>
+  <h2>Your aliases:</h2>
   {% for code in codes %}
     <a href="{{ url_for('urlshort.go_to_url', code=code) }}">
       <li>{{ code }}</li>

@@ -30,15 +30,15 @@ void Count(node_t<T> *root, std::size_t *counter);
 template <typename T>
 bool FindRec(node_t<T> *root, T val);
 template <typename T>
-bool InsertRecursively(node_t<T> **root, std::function<bool(T, T, T)> cmp, T param, T val);
+node_t<T> *InsertRecursively(node_t<T> *root, std::function<bool(T, T, T)> cmp, T param, T val);
 template <typename T>
-void RotateRight(node_t<T> *root);
+node_t<T> *RotateRight(node_t<T> *root);
 template <typename T>
-void RotateLeft(node_t<T> *root);
+node_t<T> *RotateLeft(node_t<T> *root);
 template <typename T>
-void RotateLeftRight(node_t<T> *root);
+node_t<T> *RotateLeftRight(node_t<T> *root);
 template <typename T>
-void RotateRightLeft(node_t<T> *root);
+node_t<T> *RotateRightLeft(node_t<T> *root);
 
 template <typename T>
 class avl_tree
@@ -46,7 +46,7 @@ class avl_tree
 public:
     avl_tree(std::function<bool(T, T, T)> cmp, T param);
     ~avl_tree();
-    bool Insert(T val);
+    node_t<T> *Insert(T val);
     bool Remove(T val);
     std::size_t Size() const;
     bool IsEmpty() const;
@@ -73,93 +73,102 @@ avl_tree<T>::~avl_tree()
 }
 
 template <typename T>
-bool avl_tree<T>::Insert(T val)
+node_t<T> *avl_tree<T>::Insert(T val)
 {
-    return InsertRecursively(&m_root, m_cmp, m_param, val);
+    m_root = InsertRecursively(m_root, m_cmp, m_param, val);
+
+    return m_root;
 }
 
 template <typename T>
-bool InsertRecursively(node_t<T> **root, std::function<bool(T, T, T)> cmp, T param, T val)
+node_t<T> *InsertRecursively(node_t<T> *root, std::function<bool(T, T, T)> cmp, T param, T val)
 {
 
-    if (*root == nullptr)
+    if (root == nullptr)
     {
-        (*root) = new node_t<T>;
-        (*root)->val = val;
-        (*root)->height = 1;
-        return true;
+        root = new node_t<T>;
+        root->val = val;
+        root->height = 1;
+
+        return root;
     }
 
-    bool retval = false;
-    if (cmp(val, (*root)->val, param))
+    if (cmp(val, root->val, param))
     {
-        retval = InsertRecursively(&((*root)->children[RIGHT]), cmp, param, val);
+        root->children[RIGHT] = InsertRecursively(root->children[RIGHT], cmp, param, val);
     }
     else
     {
-        retval = InsertRecursively(&((*root)->children[RIGHT]), cmp, param, val);
+        root->children[LEFT] = InsertRecursively(root->children[LEFT], cmp, param, val);
     }
-    (*root)->height = MAX(GetHeight((*root)->children[RIGHT]), GetHeight((*root)->children[LEFT])) + 1;
+    root->height = MAX(GetHeight(root->children[RIGHT]), GetHeight(root->children[LEFT])) + 1;
 
-    int balance = GetBalance(*root);
+    int balance = GetBalance(root);
     if (balance > 1) // left heavy
     {
-        if (GetBalance((*root)->children[LEFT]) >= 1)
+        if (GetBalance(root->children[LEFT]) >= 1)
         {
-            RotateRight((*root)->children[LEFT]);
+            root = RotateRight(root);
         }
         else
         {
-            RotateLeftRight((*root)->children[LEFT]);
+            root = RotateLeftRight(root->children[LEFT]);
         }
     }
     else if (balance < -1) // right heavy
     {
-        if (GetBalance((*root)->children[RIGHT]) <= 0)
+        if (GetBalance(root->children[RIGHT]) <= 0)
         {
-            RotateLeft((*root)->children[RIGHT]);
+            root = RotateLeft(root);
         }
         else
         {
-            RotateRightLeft((*root)->children[RIGHT]);
+            root = RotateRightLeft(root->children[RIGHT]);
         }
     }
-    (*root)->height = MAX(GetHeight((*root)->children[RIGHT]), GetHeight((*root)->children[LEFT])) + 1;
+    root->height = MAX(GetHeight(root->children[RIGHT]), GetHeight(root->children[LEFT])) + 1;
 
-    return retval;
+    return root;
 }
 
 template <typename T>
-void RotateRight(node_t<T> *root)
+node_t<T> *RotateRight(node_t<T> *root)
 {
     std::cout << "root " << root << std::endl;
     node_t<T> *new_root = root->children[LEFT];
     new_root->children[RIGHT] = root;
     root->children[LEFT] = nullptr;
     root->height = MAX(GetHeight(root->children[RIGHT]), GetHeight(root->children[LEFT])) + 1;
+
+    return new_root;
 }
 
 template <typename T>
-void RotateLeft(node_t<T> *root)
+node_t<T> *RotateLeft(node_t<T> *root)
 {
     node_t<T> *new_root = root->children[RIGHT];
     new_root->children[LEFT] = root;
     root->children[RIGHT] = nullptr;
     root->height = MAX(GetHeight(root->children[RIGHT]), GetHeight(root->children[LEFT])) + 1;
+
+    return new_root;
 }
 
 template <typename T>
-void RotateLeftRight(node_t<T> *root)
+node_t<T> *RotateLeftRight(node_t<T> *root)
 {
-    RotateLeft(root->children[RIGHT]);
-    RotateRight(root);
+    root->children[RIGHT] = RotateLeft(root->children[RIGHT]);
+    root = RotateRight(root);
+
+    return root;
 }
 
 template <typename T>
-void RotateRightLeft(node_t<T> *root)
+node_t<T> *RotateRightLeft(node_t<T> *root)
 {
-    RotateRight(root->children[LEFT]);
-    RotateLeft(root);
+    root->children[LEFT] = RotateRight(root->children[LEFT]);
+    root = RotateLeft(root);
+    return root;
 }
 
 template <typename T>
