@@ -2,6 +2,7 @@
 #include <functional>
 #include <cstdlib>
 #include <iostream>
+#include <queue>
 
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
 
@@ -52,6 +53,10 @@ public:
     bool IsEmpty() const;
     bool Find(T val) const;
     bool ForEach(std::function<bool> func, T param);
+    node_t<T> *GetRoot()
+    {
+        return m_root;
+    }
 
 private:
     struct node<T> *m_root; // root node
@@ -284,6 +289,48 @@ bool func(int x, int y, int param)
     return x > y;
 }
 
+template <typename T>
+void PrintPreOrder(struct node<T> *node, std::string dir)
+
+{
+    if (node != NULL)
+    {
+        std::cout << dir << ": " << node->val << "\n";
+        PrintPreOrder(node->children[LEFT], "left");
+        PrintPreOrder(node->children[RIGHT], "right");
+    }
+}
+
+template <typename T>
+void printLevelOrder(struct node<T> *root)
+{
+    // Base Case
+    if (root == NULL)
+        return;
+
+    // Create an empty queue for level order traversal
+    std::queue<struct node<T> *> q;
+
+    // Enqueue Root and initialize height
+    q.push(root);
+
+    while (q.empty() == false)
+    {
+        // Print front of queue and remove it from queue
+        struct node<T> *node = q.front();
+        std::cout << node->val << " ";
+        q.pop();
+
+        /* Enqueue left child */
+        if (node->children[LEFT] != NULL)
+            q.push(node->children[LEFT]);
+
+        /*Enqueue right child */
+        if (node->children[RIGHT] != NULL)
+            q.push(node->children[RIGHT]);
+    }
+}
+
 int main()
 {
     avl_tree<int> avl(func, 10);
@@ -294,9 +341,12 @@ int main()
     avl.Insert(3);
     avl.Insert(4);
     avl.Insert(5);
+    avl.Insert(6);
 
     std::cout << avl.IsEmpty() << std::endl;
     std::cout << avl.Size() << std::endl;
+
+    PrintPreOrder(avl.GetRoot(), "center");
 
     return 0;
 }
