@@ -108,6 +108,8 @@ int Board::MoveIfValid(BoardSquare &src, BoardSquare &dest,
             return -1;
         }
     }
+
+    return 1;
 }
 
 void Board::Kill(BoardSquare &other)

@@ -26,6 +26,8 @@ int GameLoop(Game &game)
             } */
         }
     }
+
+    return 1;
 }
 
 int main(void)

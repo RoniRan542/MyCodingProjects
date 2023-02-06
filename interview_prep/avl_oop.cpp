@@ -48,7 +48,7 @@ public:
     avl_tree(std::function<bool(T, T, T)> cmp, T param);
     ~avl_tree();
     node_t<T> *Insert(T val);
-    bool Remove(T val);
+    node_t<T> *Remove(T val);
     std::size_t Size() const;
     bool IsEmpty() const;
     bool Find(T val) const;
@@ -59,7 +59,7 @@ public:
     }
 
 private:
-    struct node<T> *m_root; // root node
+    node_t<T> *m_root; // root node
     std::function<bool(T, T, T)> m_cmp;
     T m_param;
 };
@@ -137,12 +137,71 @@ node_t<T> *InsertRecursively(node_t<T> *root, std::function<bool(T, T, T)> cmp, 
 }
 
 template <typename T>
+node_t<T> *avl_tree<T>::Remove(T val)
+{
+    bool is_found = false;
+    m_root = RemoveRecursively(root, m_cmp, m_param, val, &is_found);
+
+    return m_root;
+}
+
+template <typename T>
+node_t<T> *RemoveRecursively(node_t<T> *root, std::function<bool(T, T, T)> cmp, T param, T val, bool *found)
+{
+    if (root->val == val)
+    {
+        if (GetNumOfChildren(root) == 0)
+        {
+            root nullptr;
+        }
+        else if (GetNumOfChildren(root) == 1)
+        {
+            RemoveSingleChildNode(root);
+        }
+        else
+        {
+        }
+
+        return root;
+    }
+
+    if (cmp(val, root->val, param))
+    {
+        if (root->children[RIGHT] == nullptr)
+        {
+            return nullptr;
+        }
+        root->children[RIGHT] = RemoveRecursively(root->children[RIGHT], cmp, param, val);
+    }
+    else
+    {
+        if (root->children[LEFT] == nullptr)
+        {
+            return nullptr;
+        }
+        root->children[LEFT] = RemoveRecursively(root->children[LEFT], cmp, param, val);
+    }
+
+    return root;
+}
+
+template <typename T>
+static short GetNumOfChildren(node_t<T> *node)
+{
+    short num_of_ch = 0;
+
+    num_of_ch += (nullptr != node->children[RIGHT]);
+    num_of_ch += (nullptr != node->children[LEFT]);
+
+    return num_of_ch;
+}
+
+template <typename T>
 node_t<T> *RotateRight(node_t<T> *root)
 {
-    std::cout << "root " << root << std::endl;
     node_t<T> *new_root = root->children[LEFT];
+    root->children[LEFT] = new_root->children[RIGHT];
     new_root->children[RIGHT] = root;
-    root->children[LEFT] = nullptr;
     root->height = MAX(GetHeight(root->children[RIGHT]), GetHeight(root->children[LEFT])) + 1;
 
     return new_root;
@@ -152,8 +211,8 @@ template <typename T>
 node_t<T> *RotateLeft(node_t<T> *root)
 {
     node_t<T> *new_root = root->children[RIGHT];
+    root->children[RIGHT] = new_root->children[LEFT];
     new_root->children[LEFT] = root;
-    root->children[RIGHT] = nullptr;
     root->height = MAX(GetHeight(root->children[RIGHT]), GetHeight(root->children[LEFT])) + 1;
 
     return new_root;
@@ -196,12 +255,6 @@ int GetHeight(node_t<T> *node)
     }
 
     return node->height;
-}
-
-template <typename T>
-bool avl_tree<T>::Remove(T val)
-{
-    return true;
 }
 
 template <typename T>
@@ -290,45 +343,35 @@ bool func(int x, int y, int param)
 }
 
 template <typename T>
-void PrintPreOrder(struct node<T> *node, std::string dir)
-
+void print2DUtil(node_t<T> *root, int space)
 {
-    if (node != NULL)
-    {
-        std::cout << dir << ": " << node->val << "\n";
-        PrintPreOrder(node->children[LEFT], "left");
-        PrintPreOrder(node->children[RIGHT], "right");
-    }
-}
-
-template <typename T>
-void printLevelOrder(struct node<T> *root)
-{
-    // Base Case
+    // Base case
     if (root == NULL)
         return;
 
-    // Create an empty queue for level order traversal
-    std::queue<struct node<T> *> q;
+    // Increase distance between levels
+    space += 3;
 
-    // Enqueue Root and initialize height
-    q.push(root);
+    // Process right child first
+    print2DUtil(root->children[RIGHT], space);
 
-    while (q.empty() == false)
-    {
-        // Print front of queue and remove it from queue
-        struct node<T> *node = q.front();
-        std::cout << node->val << " ";
-        q.pop();
+    // Print current node after space
+    // count
+    std::cout << std::endl;
+    for (int i = 3; i < space; i++)
+        std::cout << " ";
+    std::cout << root->val << "\n";
 
-        /* Enqueue left child */
-        if (node->children[LEFT] != NULL)
-            q.push(node->children[LEFT]);
+    // Process left child
+    print2DUtil(root->children[LEFT], space);
+}
 
-        /*Enqueue right child */
-        if (node->children[RIGHT] != NULL)
-            q.push(node->children[RIGHT]);
-    }
+// Wrapper over print2DUtil()
+template <typename T>
+void print2D(node_t<T> *root)
+{
+    // Pass initial space count as 0
+    print2DUtil(root, 0);
 }
 
 int main()
@@ -342,11 +385,15 @@ int main()
     avl.Insert(4);
     avl.Insert(5);
     avl.Insert(6);
+    avl.Insert(7);
+    avl.Insert(8);
+    avl.Insert(9);
 
     std::cout << avl.IsEmpty() << std::endl;
     std::cout << avl.Size() << std::endl;
 
-    PrintPreOrder(avl.GetRoot(), "center");
+    // PrintPreOrder(avl.GetRoot(), "center");
+    print2D(avl.GetRoot());
 
     return 0;
 }

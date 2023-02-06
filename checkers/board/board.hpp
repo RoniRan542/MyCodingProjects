@@ -10,7 +10,7 @@
 class Board
 {
 public:
-    explicit Board();
+    Board();
     std::vector<std::vector<BoardSquare>> &GetBoard();
 
     int MoveIfValid(BoardSquare &src, BoardSquare &dest,

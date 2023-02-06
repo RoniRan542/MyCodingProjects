@@ -5,9 +5,10 @@
 
 enum PlayerId
 {
-    VOID,
+
     ONE,
-    TWO
+    TWO,
+    VOID
 
 };
 
