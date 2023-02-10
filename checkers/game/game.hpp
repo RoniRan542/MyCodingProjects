@@ -13,7 +13,7 @@ class Game
 {
 public:
     explicit Game(std::string p_name1 = "player 1", std::string p_name2 = "player 2");
-    int PlayTurn(int x, int y);
+    void PlayTurns();
     bool IsValidMove(Pawn pawn, std::pair<u_int32_t, u_int32_t>);
     Board &GetBoard();
     std::vector<Player> GetPlayers() const;

@@ -13,6 +13,10 @@ Color Player::GetColor() const
 {
     return m_color;
 }
+int Player::ChoosePawn(BoardSquare &pawn_src)
+{
+    return m_board.IsValidChoice(pawn_src, m_pid);
+}
 
 int Player::MovePlayer(BoardSquare &src, BoardSquare &dest)
 {

@@ -8,17 +8,41 @@ Game::Game(std::string p_name1, std::string p_name2)
     m_players.push_back(p2);
 }
 
-int Game::PlayTurn(int x, int y)
+void Game::PlayTurns()
 {
-    // std::cout << "player is: " << m_curr_player << std::endl;
-    if (m_players[!!m_curr_player].MovePlayer(m_board.GetBoard()[x][y], m_board.GetBoard()[x][y + 1]) == -1)
+    bool move_finished = false;
+    int retval_start = 0;
+    Vector2 src_pos;
+    Vector2 dest_pos;
+    while (move_finished == false)
     {
-        return -1;
+        if (retval_start == false)
+        {
+            if (IsMouseButtonPressed(0))
+            {
+                src_pos = GetMousePosition();
+                if (m_players[!!m_curr_player].ChoosePawn(m_board.GetBoard()[src_pos.x / 120][src_pos.y / 120]) > 0)
+                {
+                    std::cout << "player " << !!m_curr_player << "chose source successfully. " << std::endl;
+                    retval_start = true;
+                }
+            }
+        }
+        else
+        {
+            if (IsMouseButtonPressed(0))
+            {
+                dest_pos = GetMousePosition();
+                if (m_players[!!m_curr_player].MovePlayer(m_board.GetBoard()[src_pos.x / 120][src_pos.y / 120], m_board.GetBoard()[dest_pos.x / 120][dest_pos.y / 120]) > 0)
+                {
+                    std::cout << "player " << !!m_curr_player << "chose dest " << dest_pos.x / 120 << " and " << dest_pos.y / 120 << std::endl;
+                    m_curr_player = !m_curr_player;
+
+                    return;
+                }
+            }
+        }
     }
-
-    m_curr_player = !m_curr_player;
-
-    return 1;
 }
 /* void PlayerMove(Player plyr, Pawn &pawn, enum Direction dir, int steps);
 void PlayerCapture(Player plyr, Pawn &pawn, enum Direction dir, int steps); */

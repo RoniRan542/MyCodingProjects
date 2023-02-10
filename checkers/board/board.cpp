@@ -68,29 +68,39 @@ void Board::Move(BoardSquare &src, BoardSquare &dest,
     src.SetPawn(Pawn());
 }
 
-int Board::MoveIfValid(BoardSquare &src, BoardSquare &dest,
-                       enum PlayerId plyr, int pawn_id)
+int Board::IsValidChoice(BoardSquare &src, enum PlayerId plyr)
 {
     // check if the pawn belongs ro this player:
-    std::cout << "src player id: " << src.GetPlayerId() << std::endl;
-    std::cout << "actual player id: " << plyr << std::endl;
+    // std::cout << "src player id: " << src.GetPlayerId() << std::endl;
+    // std::cout << "actual player id: " << plyr << std::endl;
     if (src.GetPlayerId() != plyr)
     {
         return -1;
     }
+
+    return 1;
+}
+int Board::MoveIfValid(BoardSquare &src, BoardSquare &dest,
+                       enum PlayerId plyr, int pawn_id)
+{
+
     // check if dest is empty:
     std::cout << "dest pawn id: " << dest.GetPawn().GetPawnId() << std::endl;
     if (dest.GetPawn().GetPawnId() != -1)
     {
-        return -1;
+        return -2;
     }
-    // check if move is consistent
+    // check if move isn't consistent
     if (abs(dest.GetX() - src.GetX()) != 1 || abs(dest.GetY() - src.GetY()) != 1)
     {
-        if (abs(dest.GetX() - src.GetX()) != 2 && abs(dest.GetY() - src.GetY()) != 2)
+        if (abs(dest.GetX() - src.GetX()) == 2 && abs(dest.GetY() - src.GetY()) == 2)
         {
-            BoardSquare &mid_square = board_squares_2d[src.GetX() + 1][src.GetY() + 1];
+            std::cout << "mid_square x: " << src.GetX() + (dest.GetX() - src.GetX()) / 2 << std::endl;
+            std::cout << "mid_square y: " << src.GetY() + (dest.GetX() - src.GetX()) / 2 << std::endl;
 
+            BoardSquare &mid_square = board_squares_2d[src.GetX() + (dest.GetX() - src.GetX()) / 2][src.GetY() + (dest.GetY() - src.GetY()) / 2];
+            std::cout << "mid_square.GetPlayerId(): " << mid_square.GetPlayerId() << std::endl;
+            std::cout << "plyr: " << plyr << std::endl;
             if (mid_square.GetPlayerId() != plyr &&
                 mid_square.GetPlayerId() != PlayerId::VOID)
             {
@@ -100,13 +110,20 @@ int Board::MoveIfValid(BoardSquare &src, BoardSquare &dest,
             }
             else
             {
-                return -1;
+                std::cout << "error: " << -3 << std::endl;
+
+                return -3;
             }
         }
         else
         {
-            return -1;
+            std::cout << "error: " << -4 << std::endl;
+            return -4;
         }
+    }
+    else
+    {
+        Move(src, dest, plyr, pawn_id);
     }
 
     return 1;

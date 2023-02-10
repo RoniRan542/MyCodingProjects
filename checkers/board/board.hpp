@@ -12,12 +12,13 @@ class Board
 public:
     Board();
     std::vector<std::vector<BoardSquare>> &GetBoard();
-
+    int IsValidChoice(BoardSquare &src, enum PlayerId plyr);
     int MoveIfValid(BoardSquare &src, BoardSquare &dest,
                     enum PlayerId plyr, int pawn_id);
 
 private:
     void Init();
+
     void Move(BoardSquare &src, BoardSquare &dest,
               enum PlayerId plyr, int pawn_id);
     void Kill(BoardSquare &other);

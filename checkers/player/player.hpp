@@ -13,6 +13,7 @@ class Player
 {
 public:
     explicit Player(Board &board, Color player_color, std::string name, PlayerId player_id);
+    int ChoosePawn(BoardSquare &pawn_src);
     int MovePlayer(BoardSquare &src, BoardSquare &dest);
     Color GetColor() const;
 

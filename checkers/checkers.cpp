@@ -11,20 +11,7 @@ int GameLoop(Game &game)
 {
     while (!WindowShouldClose())
     {
-        if (IsMouseButtonPressed(0))
-        {
-            Vector2 pos = GetMousePosition();
-            // std::cout << pos.x / 120 << " " << pos.y / 120 << std::endl;
-            std::cout << game.PlayTurn((pos.x / 120), (pos.y / 120)) << std::endl;
-            /* if (game.PlayTurn((pos.x / 120), (pos.y / 120)) == -1)
-            {
-                continue;
-            }
-            else
-            {
-                continue;
-            } */
-        }
+        game.PlayTurns();
     }
 
     return 1;
