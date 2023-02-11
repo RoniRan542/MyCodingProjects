@@ -14,11 +14,13 @@ void Board::Init()
     board_squares_2d.resize(8, std::vector<BoardSquare>(8));
     for (size_t i = 0; i < 8; i++)
     {
+        std::cout << i << " [ ";
+
         for (size_t j = 0; j < 8; j++)
         {
             board_squares_2d[i][j].SetXY(i, j);
-
-            if (i < 3)
+            std::cout << j << " ";
+            if (j < 3)
             {
 
                 if ((i % 2) == 0)
@@ -38,7 +40,7 @@ void Board::Init()
                     }
                 }
             }
-            else if (i > 4)
+            else if (j > 4)
             {
                 if ((i % 2) == 1)
                 {
@@ -58,6 +60,8 @@ void Board::Init()
                 }
             }
         }
+        std::cout << "]\n"
+                  << std::endl;
     }
 }
 
@@ -70,9 +74,6 @@ void Board::Move(BoardSquare &src, BoardSquare &dest,
 
 int Board::IsValidChoice(BoardSquare &src, enum PlayerId plyr)
 {
-    // check if the pawn belongs ro this player:
-    // std::cout << "src player id: " << src.GetPlayerId() << std::endl;
-    // std::cout << "actual player id: " << plyr << std::endl;
     if (src.GetPlayerId() != plyr)
     {
         return -1;
@@ -90,6 +91,17 @@ int Board::MoveIfValid(BoardSquare &src, BoardSquare &dest,
     {
         return -2;
     }
+
+    // check if player moving forward not backwards
+    if (plyr == PlayerId::ONE && (dest.GetY() - src.GetY() < 0))
+    {
+        return -5;
+    }
+    if (plyr == PlayerId::TWO && (dest.GetY() - src.GetY() > 0))
+    {
+        return -5;
+    }
+
     // check if move isn't consistent
     if (abs(dest.GetX() - src.GetX()) != 1 || abs(dest.GetY() - src.GetY()) != 1)
     {
